@@ -1,7 +1,7 @@
 package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
-import io.purple.techparts.hammer.ResourcePackAdapter;
+import io.purple.techparts.resource.ResourcePackAdapter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
@@ -35,7 +35,7 @@ import io.purple.techparts.resource.TechPartsPack;
 @Mod(REF.ID)
 public class TechParts {
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, REF.ID);
     // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
@@ -79,6 +79,10 @@ public class TechParts {
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
+        //TEST
+        modEventBus.addListener(this::onClientSetup);
+        ResourcePackAdapter.registerResourcePack(TechPartsPack.getPackInstance());
+
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -109,16 +113,16 @@ public class TechParts {
         LOGGER.info("HELLO from server starting");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    /*// You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = REF.ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
+    public static class ClientModEvents {*/
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
+        public /*static*/ void onClientSetup(FMLClientSetupEvent event) {
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
-            TechPartsPack.getPackInstance().init();
+            //TechPartsPack.getPackInstance().init();
         }
-    }
+    //}
 }
