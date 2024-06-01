@@ -21,6 +21,8 @@ import java.util.*;
 import java.util.function.BooleanSupplier;
 
 import static io.purple.techparts.TechParts.LOGGER;
+import static io.purple.techparts.setup.Register.BLOCKS;
+import static io.purple.techparts.setup.Register.ITEMS;
 
 public class TechPartsPack implements PackResources {
 
@@ -50,7 +52,7 @@ public class TechPartsPack implements PackResources {
 
         Map<String, String> translatables = new HashMap<>();
 
-        for (RegistryObject<Item> entry : TechParts.ITEMS.getEntries()) {
+        for (RegistryObject<Item> entry : ITEMS.getEntries()) {
             Item item = entry.get();
             // TODO - Rework with real Item Arraylist
 
@@ -65,7 +67,7 @@ public class TechPartsPack implements PackResources {
             resourceMap.put(itemModel, ofText(itemModelJson));
         }
 
-        for (RegistryObject<Block> entry : TechParts.BLOCKS.getEntries()) {
+        for (RegistryObject<Block> entry : BLOCKS.getEntries()) {
             // TODO - Rework with real Block ArrayList
 
             String blockID = entry.getId().getPath();

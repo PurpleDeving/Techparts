@@ -2,6 +2,7 @@ package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
 import io.purple.techparts.resource.ResourcePackAdapter;
+import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
@@ -31,15 +32,15 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import io.purple.techparts.resource.TechPartsPack;
 
+import static io.purple.techparts.setup.Register.BLOCKS;
+import static io.purple.techparts.setup.Register.ITEMS;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(REF.ID)
 public class TechParts {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
-    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, REF.ID);
-    // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, REF.ID);
+
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, REF.ID);
 
@@ -66,12 +67,10 @@ public class TechParts {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register the Deferred Register to the mod event bus so blocks get registered
-        BLOCKS.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so items get registered
-        ITEMS.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so tabs get registered
-        CREATIVE_MODE_TABS.register(modEventBus);
+        Register.registerInit(modEventBus);
+
+
+
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
