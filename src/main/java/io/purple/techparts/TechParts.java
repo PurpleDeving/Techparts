@@ -1,6 +1,8 @@
 package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
+import io.purple.techparts.item.MatPartItem;
+import io.purple.techparts.material.MatDeclaration;
 import io.purple.techparts.resource.ResourcePackAdapter;
 import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
@@ -32,8 +34,8 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import io.purple.techparts.resource.TechPartsPack;
 
-import static io.purple.techparts.setup.Register.BLOCKS;
-import static io.purple.techparts.setup.Register.ITEMS;
+import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
+import static io.purple.techparts.setup.Register.*;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(REF.ID)
@@ -49,16 +51,14 @@ public class TechParts {
     // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
     public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("sapphire_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
 
-    // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
-    public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("sapphire", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
-            .alwaysEat().nutrition(1).saturationMod(2f).build())));
+
 
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
+            .icon(() -> SAPPHIRE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(SAPPHIRE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
 
     public TechParts() {
@@ -103,6 +103,9 @@ public class TechParts {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
             event.accept(EXAMPLE_BLOCK_ITEM);
+        for (RegistryObject<MatPartItem> matPartItem : MATERIAL_PART_ITEMS){
+            event.accept(matPartItem);
+        };
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

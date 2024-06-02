@@ -9,7 +9,7 @@ public class MatPartBlock extends Block {
     private final Material material;
     private final Parts part;
 
-    public MatPartBlock(Properties pProperties, Material material, Parts part) {
+    public MatPartBlock(Material material, Parts part, Properties pProperties) {
         super(pProperties);
         this.material = material;
         this.part = part;

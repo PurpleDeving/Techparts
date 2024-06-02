@@ -14,13 +14,13 @@ import java.util.*;
 
 import static io.purple.techparts.material.Parts.*;
 import static io.purple.techparts.material.Material.*;
+import static io.purple.techparts.setup.Register.MATERIAL_PART_BLOCKS;
+import static io.purple.techparts.setup.Register.MATERIAL_PART_ITEMS;
 
 public class MatDeclaration{
 
 
-    public static final Collection<RegistryObject<MatPartItem>> MATERIAL_PART_ITEMS = new ArrayList<>();
-    public static final Collection<RegistryObject<MatPartBlock>> MATERIAL_PART_BLOCKS = new ArrayList<>();
-    public static final Collection<RegistryObject<MatPartBlockItem>> MATERIAL_PART_BLOCKITEMS = new ArrayList<>();
+
 
 
     public static void init(){
@@ -117,7 +117,7 @@ public class MatDeclaration{
 
                 MATERIAL_PART_BLOCKS.add(Register.registerMatPartBlock(material,part));
             } else{
-                //MATERIAL_PART_ITEMS.add(TechPartsItems.registerMatPartItem(material,part)); TODO - Implement
+                MATERIAL_PART_ITEMS.add(Register.registerMatPartItem(material,part));
             }
         }
     }

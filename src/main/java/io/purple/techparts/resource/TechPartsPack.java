@@ -3,6 +3,7 @@ package io.purple.techparts.resource;
 import com.google.gson.JsonObject;
 import io.purple.techparts.REF;
 import io.purple.techparts.TechParts;
+import io.purple.techparts.item.BasicItem;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
@@ -21,8 +22,7 @@ import java.util.*;
 import java.util.function.BooleanSupplier;
 
 import static io.purple.techparts.TechParts.LOGGER;
-import static io.purple.techparts.setup.Register.BLOCKS;
-import static io.purple.techparts.setup.Register.ITEMS;
+import static io.purple.techparts.setup.Register.*;
 
 public class TechPartsPack implements PackResources {
 
@@ -52,18 +52,23 @@ public class TechPartsPack implements PackResources {
 
         Map<String, String> translatables = new HashMap<>();
 
-        for (RegistryObject<Item> entry : ITEMS.getEntries()) {
-            Item item = entry.get();
+        // TODO - Implement MatPartITEM
+        // For this > Make the for loop below generic/a method
+        // OR NOT > Besonderheiten in den dingen
+
+        for (RegistryObject<BasicItem> entry : BASIC_ITEMS) {
+            BasicItem item = entry.get();
+            String name = item.getName();
+            String id = item.getId();
             // TODO - Rework with real Item Arraylist
 
             if(item.toString().contains("block")){
                 continue;
             }
 
-            translatables.put(String.format("item.%s.%s", REF.ID, item.toString()), "Sapphire"); //TODO - Exchange for final Name Reference
-
-            ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + item.toString() + ".json");
-            String itemModelJson = generateItemModelJson(item.toString());
+            translatables.put(String.format("item.%s.%s", REF.ID, id), name); //TODO - Exchange for final Name Reference
+            ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + id + ".json");
+            String itemModelJson = generateItemModelJson("basic/" + id);
             resourceMap.put(itemModel, ofText(itemModelJson));
         }
 
