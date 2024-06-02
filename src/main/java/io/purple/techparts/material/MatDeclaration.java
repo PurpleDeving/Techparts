@@ -1,17 +1,10 @@
 package io.purple.techparts.material;
 
 
-import io.purple.techparts.block.MatPartBlock;
-import io.purple.techparts.block.MatPartBlockItem;
-import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.setup.Register;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-
 import java.util.*;
 
+import static io.purple.techparts.TechParts.LOGGER;
 import static io.purple.techparts.material.Parts.*;
 import static io.purple.techparts.material.Material.*;
 import static io.purple.techparts.setup.Register.MATERIAL_PART_BLOCKS;
@@ -43,33 +36,33 @@ public class MatDeclaration{
     /*
         Material Sets
      */
-        EnumSet<Material> mats_allNonVanilla = EnumSet.range(BRASS,QUARTZITE);
+        //EnumSet<Material> mats_allNonVanilla = EnumSet.range(BRASS,QUARTZITE);
 
         //Vanilla needs to Exclude existing parts
         createMaterialGroupExcludeGroup(GOLD,all,vanillaMetals);
-        createMaterialGroupExcludeGroup(IRON,all,vanillaMetals);
+        /*createMaterialGroupExcludeGroup(IRON,all,vanillaMetals);
         createMaterialGroupExcludeSingles(GLOWSTONE,all,DUST,BLOCK);
         createMaterialGroupExcludeSingles(COPPER,all,INGOT,ORE_RAW,BLOCK); //Not ExcludeGroup vanillaMetals, because there is no vanilla Copper Nugget
         createMaterialGroupExcludeSingles(REDSTONE,ores);
         createMaterialGroupAddSingles(CHARCOAL,dustsandores,BLOCK,PLATE);
         createMaterialGroupAddSingles(COAL,dustsandores,BLOCK,PLATE);
-        createMaterialGroupAddSingles(QUARTZ,ores,DUST,PLATE);
-        createMaterialSingles(NETHERITE,DUST,PLATE,NUGGET,PLATE_DENSE,ROD,GEAR_SMALL,LENS);
+        createMaterialGroupAddSingles(QUARTZ,ores,DUST,PLATE);*/
+        /*createMaterialSingles(NETHERITE,DUST,PLATE,NUGGET,PLATE_DENSE,ROD,GEAR_SMALL,LENS); */
 
         //Common Mod Materials
-        createMaterialGroupAddSingles(CERTUS_QUARTZ,ores,PLATE,PLATE_DENSE,RING);
-        createMaterialGroupAddSingles(CINNABAR,dustsandores,LENS,GEM_POLISHED);
-        createMaterialGroupExcludeSingles(SULFUR,dustsandores,DUST);
-        createMaterialGroupExcludeSingles(OBSIDIAN,all,GEAR,GEM_POLISHED,LENS);
-        createMaterialSingles(REFINED_OBSIDIAN,GEAR,GEM_POLISHED,LENS);
+        //createMaterialGroupAddSingles(CERTUS_QUARTZ,ores,PLATE,PLATE_DENSE,RING);
+        //createMaterialGroupAddSingles(CINNABAR,dustsandores,LENS,GEM_POLISHED);
+        //createMaterialGroupExcludeSingles(SULFUR,dustsandores,DUST);
+        //createMaterialGroupExcludeSingles(OBSIDIAN,all,GEAR,GEM_POLISHED,LENS);
+        //createMaterialSingles(REFINED_OBSIDIAN,GEAR,GEM_POLISHED,LENS);
 
         //Liquids
         //createLiquid(GLUE);
 
         //ALL loop for WIP things
-        for(Material material:mats_allNonVanilla){
-            createMaterialGroupAddSingles(material,all);
-        }
+        //for(Material material:mats_allNonVanilla){
+        //    createMaterialGroupAddSingles(material,all);
+        //}
 
     }
 
@@ -113,17 +106,18 @@ public class MatDeclaration{
         for(Parts part:listOfParts){
 
             //Add itemlike (Block or ITEM) to materialParts_XXXX for datagen
-            if(part==FRAME ||part==BLOCK){
-
-                MATERIAL_PART_BLOCKS.add(Register.registerMatPartBlock(material,part));
-            } else{
-                MATERIAL_PART_ITEMS.add(Register.registerMatPartItem(material,part));
+            switch (part) {
+                case FRAME, BLOCK:
+                    MATERIAL_PART_BLOCKS.add(Register.registerMatPartBlock(material, part));
+                    break;
+                case LIQUID:
+                    //TODO - Implement
+                    LOGGER.info("Fluids arnt a thing ATM");
+                    break;
+                default:
+                    MATERIAL_PART_ITEMS.add(Register.registerMatPartItem(material, part));
             }
         }
     }
-
-
-
-
 
 }

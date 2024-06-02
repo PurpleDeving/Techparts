@@ -26,6 +26,26 @@ public class MatPartItem extends Item {
         this.part = bitem.part;
     }
 
+    public Material getMaterial() {
+        return material;
+    }
+
+    public Parts getPart() {
+        return part;
+    }
+
+    public String getTooltip() {
+        return tooltip;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public static class ItemBuilder{
         public Material material;
         public Parts part;
@@ -60,7 +80,7 @@ public class MatPartItem extends Item {
         }
 
         public MatPartItem build(){
-            this.id = this.material + "_" + this.part;
+            this.id = this.material.getID() + "_" + this.part.getID();
             return new MatPartItem(this);
         }
 

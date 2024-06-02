@@ -4,6 +4,10 @@ import com.google.gson.JsonObject;
 import io.purple.techparts.REF;
 import io.purple.techparts.TechParts;
 import io.purple.techparts.item.BasicItem;
+import io.purple.techparts.item.MatPartItem;
+import io.purple.techparts.material.Material;
+import io.purple.techparts.material.Parts;
+import io.purple.techparts.material.Texture;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
@@ -56,17 +60,31 @@ public class TechPartsPack implements PackResources {
         // For this > Make the for loop below generic/a method
         // OR NOT > Besonderheiten in den dingen
 
+
+        for (RegistryObject<MatPartItem> entry : MATERIAL_PART_ITEMS){
+            MatPartItem item = entry.get();
+            String name = item.getName();
+            String id = item.getId();
+            Material mat = item.getMaterial();
+            String tex = mat.getTexture();
+            Parts part = item.getPart();
+
+            translatables.put(String.format("item.%s.%s", REF.ID, id), name);
+            ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + id + ".json");
+            String itemModelJson = generateItemModelJson("material/" + tex + "/" + part.getID());
+            resourceMap.put(itemModel, ofText(itemModelJson));
+        }
+
         for (RegistryObject<BasicItem> entry : BASIC_ITEMS) {
             BasicItem item = entry.get();
             String name = item.getName();
             String id = item.getId();
-            // TODO - Rework with real Item Arraylist
 
-            if(item.toString().contains("block")){
+            if(id.contains("block")){
                 continue;
             }
 
-            translatables.put(String.format("item.%s.%s", REF.ID, id), name); //TODO - Exchange for final Name Reference
+            translatables.put(String.format("item.%s.%s", REF.ID, id), name);
             ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + id + ".json");
             String itemModelJson = generateItemModelJson("basic/" + id);
             resourceMap.put(itemModel, ofText(itemModelJson));

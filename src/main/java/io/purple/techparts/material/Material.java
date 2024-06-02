@@ -10,19 +10,25 @@ public enum Material {
     /*
         VANILLA
      */
+
+    GOLD(0xffe650,"gold",SHINY),
+
+    /*
+        CUTOFF of used Materials
+     */
+
     CHARCOAL(0x644646,"charcoal",LIGNITE),
     GLOWSTONE(0xffff00,"glowstone",SHINY),
     IRON(0xa19d94,"iron",METALLIC),
     COAL(0x131212,"coal",LIGNITE),
-    GOLD(0xffe650,"gold",SHINY),
     QUARTZ(0xffffff,"quartz",Texture.QUARTZ),
     COPPER(0xB87333,"copper", SHINY),
     REDSTONE(0xB87333,"redstone", SHINY),
-    NETHERITE(0x353935,"netherite", LIGNITE), //TODO: Does Lignite have the needed texture ? Run Data to check
+    NETHERITE(0x353935,"netherite", LIGNITE), //TODO: Does Lignite have the needed texture ?
 
     /*
         Common Mod Materials
-     */
+
 
     CERTUS_QUARTZ(0x55FFFF, "certus_quartz",Texture.QUARTZ),
     CINNABAR(0x960000,"cinnabar",ROUGH),
@@ -41,7 +47,7 @@ public enum Material {
     NICKEL(0xc8c8fa,"nickel" ,METALLIC),
     OSMIUM(0x3232ff,"osmium" ,METALLIC),
 
-    INVAR(0xb4b478,"invar",METALLIC),
+    INVAR(0xb4b478,"invar",METALLIC), */
     /*
         Rare Mod Materials
      */
@@ -49,7 +55,7 @@ public enum Material {
     IRIDIUM(0xf0f0f5,"iridium",DULL),
     /*
         To Sort
-     */
+
 
 
 
@@ -158,19 +164,20 @@ public enum Material {
     BARITE(0xe6ebff,"barite",DULL),
     TALC(0x5ab45a,"talc",DULL),
     SOAPSTONE(0x5f915f,"soapstone",DULL),
-    CONCRETE(0x646464,"concrete",ROUGH),
+    CONCRETE(0x646464,"concrete",ROUGH),*/
 
 
     /**
      * Gems
      **/
 
-    DILITHIUM(0xfffafa,"dilithium",DIAMOND),
-    NETHER_STAR(0xffffff,"nether_star",DIAMOND,"Nether Star"),
+    //DILITHIUM(0xfffafa,"dilithium",DIAMOND),
+    //NETHER_STAR(0xffffff,"nether_star",DIAMOND,"Nether Star"),
 
     /**
      * Gems BRITTLE
      **/
+    /*
     BLUE_TOPAZ(0x0000ff,"blue_topaz",GEM_H),
 
     CoalCoke(0x8c8caa,"coal_coke",LIGNITE),
@@ -188,7 +195,7 @@ public enum Material {
     AMETHYST(0xd232d2,"amethyst",RUBY),
     PHOSPHORUS(0xffff00,"phosphorus",FLINT),
     RED_GARNET(0xc85050,"red_garnet",RUBY,"Red Garnet"),
-    YELLOW_GARNET(0xc8c850,"yellow_garnet",RUBY,"Yellow Garnet"),
+    YELLOW_GARNET(0xc8c850,"yellow_garnet",RUBY,"Yellow Garnet"), */
 
     /*
 
@@ -262,6 +269,7 @@ public enum Material {
     KIMBERLITE(0x64460a,"kimberlite",NONE),
     QUARTZITE(0xe6cdcd,"quartzite",Texture.QUARTZ),
     //ALL STOPS HERE
+
 
     /*
         LIQUIDS
