@@ -6,6 +6,7 @@ import io.purple.techparts.material.MatDeclaration;
 import io.purple.techparts.resource.ResourcePackAdapter;
 import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -124,7 +125,7 @@ public class TechParts {
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
-            //TechPartsPack.getPackInstance().init();
+            // Register block color handlers
         }
     //}
 }

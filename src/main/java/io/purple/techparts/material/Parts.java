@@ -88,6 +88,8 @@ public enum Parts {
         return nameBuilder.toString().trim();
     }
 
+    // TODO - Fix name with pre + suffix
+
     public final String getID(){
         return this.id;
     }

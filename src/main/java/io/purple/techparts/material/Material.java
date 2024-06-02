@@ -11,11 +11,11 @@ public enum Material {
         VANILLA
      */
 
-    GOLD(0xffe650,"gold",SHINY),
+    GOLD(255,250,242,94,"gold",SHINY), //0xffe650
 
     /*
         CUTOFF of used Materials
-     */
+
 
     CHARCOAL(0x644646,"charcoal",LIGNITE),
     GLOWSTONE(0xffff00,"glowstone",SHINY),
@@ -24,7 +24,7 @@ public enum Material {
     QUARTZ(0xffffff,"quartz",Texture.QUARTZ),
     COPPER(0xB87333,"copper", SHINY),
     REDSTONE(0xB87333,"redstone", SHINY),
-    NETHERITE(0x353935,"netherite", LIGNITE), //TODO: Does Lignite have the needed texture ?
+    NETHERITE(0x353935,"netherite", LIGNITE), //TODO: Does Lignite have the needed texture ?*/
 
     /*
         Common Mod Materials
@@ -50,9 +50,11 @@ public enum Material {
     INVAR(0xb4b478,"invar",METALLIC), */
     /*
         Rare Mod Materials
-     */
 
     IRIDIUM(0xf0f0f5,"iridium",DULL),
+     */
+
+
     /*
         To Sort
 
@@ -207,7 +209,7 @@ public enum Material {
 
     /*
         METALS
-     */
+
     BATTERYALLOY(0x9c7ca0,"battery_alloy",DULL),
     BRONZE(0xff8000,"bronze",METALLIC),
     CUPRONICKEL(0xe39680,"cupronickel",METALLIC),
@@ -243,10 +245,10 @@ public enum Material {
     NAQUADAH_ENRICHED(0x323232,"enriched_naquadah",SHINY,"Enriched Naquadah"),
 
     VIBRANIUM(0x00ffff,"vibranium",SHINY),
-
+*/
     /*
         PLASTICS
-     */
+
 
     POLYETHYLENE(0xc8c8c8,"polyethylene",DULL),
     SILICON_RUBBER(0x9fadbb,"silicon_rubber",NONE,"Silicon-Rubber"),
@@ -254,10 +256,10 @@ public enum Material {
     SILICONE(0xdcdcdc,"silicone",DULL),
     POLYTYRENE(0xbeb4aa,"polystyrene",DULL),
     EPOXID_FIBER(0xa07010,"fiber_reinforced_epoxy_resin",DULL,"Fiber Reinforced Epoxy"),
-
+  */
     /*
         SOLIDS
-     */
+
 
     RED_GRANITE(0xff0080,"red_granite",ROUGH,"Red Granite"),
     BLACK_GRANITE(0x0a0a0a,"black_granite",ROUGH,"Black Granite"),
@@ -269,37 +271,42 @@ public enum Material {
     KIMBERLITE(0x64460a,"kimberlite",NONE),
     QUARTZITE(0xe6cdcd,"quartzite",Texture.QUARTZ),
     //ALL STOPS HERE
-
+    */
 
     /*
         LIQUIDS
      */
-    GLUE(0xc8c400,"glue",NONE);
-    private final int rbg;
+    GLUE(255,255,255,255,"glue",NONE);
+    private final int alpha;
+    private final int red;
+    private final int blue;
+    private final int green;
     private final String id;
     private final String name;
 
     private final Texture texture;
 
-    Material(int rbg, String id){
-        this(rbg,id,DULL);
+
+    Material(int alpha, int red, int green, int blue, String id, Texture tex){
+        this(alpha,red,green,blue,id, tex,id.substring(0,1).toUpperCase() + id.substring(1).toLowerCase());
     }
 
-    Material(int rbg, String id, Texture texture){
-        this(rbg,id, texture,id.substring(0,1).toUpperCase() + id.substring(1).toLowerCase());
-    }
-
-    Material(int rbg, String id, Texture texture, String name) {
-        this.rbg = rbg;
+    Material(int alpha, int red, int green, int blue, String id, Texture tex, String name){
+        this.alpha = alpha;
+        this.red = red;
+        this.blue = blue;
+        this.green = green;
         this.id = id;
-        this.texture = texture;
+        this.texture = tex;
         this.name = name;
     }
 
 
 
     public final int getRbg() {
-        return this.rbg;
+        int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;   // ARGB
+        //int argb = (red << 24) | (green << 16) | (blue << 8) | alpha; // RGBA instead of ARGB
+        return argb;
     }
 
     public String getName() {
