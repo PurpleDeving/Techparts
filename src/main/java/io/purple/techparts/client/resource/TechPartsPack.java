@@ -1,21 +1,19 @@
-package io.purple.techparts.resource;
+package io.purple.techparts.client.resource;
 
 import com.google.gson.JsonObject;
 import io.purple.techparts.REF;
-import io.purple.techparts.TechParts;
+import io.purple.techparts.block.BasicBlock;
+import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.item.BasicItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
-import io.purple.techparts.material.Texture;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.resources.IoSupplier;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,9 +54,7 @@ public class TechPartsPack implements PackResources {
 
         Map<String, String> translatables = new HashMap<>();
 
-        // TODO - Implement MatPartITEM
-        // For this > Make the for loop below generic/a method
-        // OR NOT > Besonderheiten in den dingen
+        // TODO - Make the overlap smaller - They do basically the same thing
 
 
         for (RegistryObject<MatPartItem> entry : MATERIAL_PART_ITEMS){
@@ -66,7 +62,7 @@ public class TechPartsPack implements PackResources {
             String name = item.getName();
             String id = item.getId();
             Material mat = item.getMaterial();
-            String tex = mat.getTexture();
+            String tex = mat.getTexture().getID();
             Parts part = item.getPart();
 
             translatables.put(String.format("item.%s.%s", REF.ID, id), name);
@@ -90,8 +86,10 @@ public class TechPartsPack implements PackResources {
             resourceMap.put(itemModel, ofText(itemModelJson));
         }
 
-        for (RegistryObject<Block> entry : BLOCKS.getEntries()) {
-            // TODO - Rework with real Block ArrayList
+        for (RegistryObject<BasicBlock> entry : BASIC_BLOCKS) {
+            // FIXME - Translation name is broken
+
+            LOGGER.info("267 - Initiate Sapphire Block");
 
             String blockID = entry.getId().getPath();
 
@@ -105,7 +103,7 @@ public class TechPartsPack implements PackResources {
             String blockModelJson = generateBlockModelJson(blockID);
             String itemModelJson = generateBlockItemModelJson(blockID);
 
-            LOGGER.info("Blockstate JSON 266: " + blockstateJson);
+            LOGGER.info("Blockstate JSON 267: " + blockstateJson);
             LOGGER.info("Block model JSON: " + blockModelJson);
             LOGGER.info("Item model JSON: " + itemModelJson);
 
@@ -114,6 +112,35 @@ public class TechPartsPack implements PackResources {
             LOGGER.info("Block model path: " + blockModel);
             LOGGER.info("Item model path: " + itemModel);
 
+            resourceMap.put(blockstate, ofText(blockstateJson));
+            resourceMap.put(blockModel, ofText(blockModelJson));
+            resourceMap.put(itemModel, ofText(itemModelJson));
+        }
+
+        for (RegistryObject<MatPartBlock> entry : MATERIAL_PART_BLOCKS){
+            String blockID = entry.get().getId();
+            String path = entry.get().getTexPath();
+
+            translatables.put(String.format("block.%s.%s", REF.ID, blockID), "Sapphire Block"); //TODO - Exchange for final Name Reference
+
+            ResourceLocation blockstate = new ResourceLocation(REF.ID, "blockstates/" + blockID + ".json");
+            ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/block/" + blockID + ".json");
+            ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + blockID + ".json");
+
+            String blockstateJson = generateBlockstatesJson(blockID); // Path to Block Model
+            String blockModelJson = generateBlockModelJson(path); // Path to Texture
+            String itemModelJson = generateBlockItemModelJson(path); // Path to Texture
+
+            LOGGER.info(path);
+
+            LOGGER.info("Blockstate JSON 266: " + blockstateJson);
+            LOGGER.info("Block model JSON: " + blockModelJson);
+            LOGGER.info("Item model JSON: " + itemModelJson);
+
+
+            LOGGER.info("Blockstate path: " + blockstate);
+            LOGGER.info("Block model path: " + blockModel);
+            LOGGER.info("Item model path: " + itemModel);
 
             resourceMap.put(blockstate, ofText(blockstateJson));
             resourceMap.put(blockModel, ofText(blockModelJson));

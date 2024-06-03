@@ -1,4 +1,4 @@
-package io.purple.techparts.resource;
+package io.purple.techparts.client.resource;
 
 
 import net.minecraft.SharedConstants;

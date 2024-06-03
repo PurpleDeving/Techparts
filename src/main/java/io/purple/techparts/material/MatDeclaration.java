@@ -103,6 +103,7 @@ public class MatDeclaration{
     }
 
     private static void createMaterialFromList(Material material, ArrayList<Parts> listOfParts) {
+        LOGGER.info("Creating MaterialItems");
         for(Parts part:listOfParts){
 
             //Add itemlike (Block or ITEM) to materialParts_XXXX for datagen

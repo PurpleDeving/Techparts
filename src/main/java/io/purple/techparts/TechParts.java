@@ -1,14 +1,12 @@
 package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
+import io.purple.techparts.block.MatPartBlockItem;
 import io.purple.techparts.item.MatPartItem;
-import io.purple.techparts.material.MatDeclaration;
-import io.purple.techparts.resource.ResourcePackAdapter;
+import io.purple.techparts.client.resource.ResourcePackAdapter;
 import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -17,7 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -33,7 +30,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-import io.purple.techparts.resource.TechPartsPack;
+import io.purple.techparts.client.resource.TechPartsPack;
 
 import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 import static io.purple.techparts.setup.Register.*;
@@ -107,6 +104,9 @@ public class TechParts {
         for (RegistryObject<MatPartItem> matPartItem : MATERIAL_PART_ITEMS){
             event.accept(matPartItem);
         };
+        for (RegistryObject<MatPartBlockItem> matPartBlockItem : MATERIAL_PART_BLOCKITEMS){
+            event.accept(matPartBlockItem);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

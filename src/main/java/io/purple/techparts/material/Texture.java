@@ -42,8 +42,7 @@ public enum Texture {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
+    public String getID() {
         return id;
     }
 }

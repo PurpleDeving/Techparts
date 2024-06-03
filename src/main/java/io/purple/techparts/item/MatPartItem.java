@@ -1,27 +1,25 @@
 package io.purple.techparts.item;
 
+import io.purple.techparts.material.MatPartCombo;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
 import io.purple.techparts.setup.Register;
-import net.minecraft.world.item.Item;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class MatPartItem extends Item {
+public class MatPartItem extends BasicItem implements MatPartCombo {
 
     private final Material material;
     private final Parts part;
-    private final String tooltip;
     private final String id;
     private final String name;
 
 
     public MatPartItem(ItemBuilder bitem) {
-        super(bitem.properties);
-        this.tooltip = bitem.tooltip;
+        super(bitem);
         this.id = bitem.id;
-        this.name = fixname(bitem.name);
+        this.name = bitem.name;
         this.material = bitem.material;
         this.part = bitem.part;
     }
@@ -34,19 +32,12 @@ public class MatPartItem extends Item {
         return part;
     }
 
-    public String getTooltip() {
-        return tooltip;
+    @Override
+    public String getTexPath() {
+        return String.join(getMaterial().getTexture().getID(),"/",getId());
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public static class ItemBuilder{
+    public static class ItemBuilder extends BasicItem.ItemBuilder {
         public Material material;
         public Parts part;
         private Properties properties = Register.baseItemProps();
@@ -65,16 +56,12 @@ public class MatPartItem extends Item {
             return this;
         }
 
-        public MatPartItem.ItemBuilder tip(String tip){
-            this.tooltip = tip;
-            return this;
-        }
-        public MatPartItem.ItemBuilder name(String name){
+        public ItemBuilder name(String name){
             this.name = name;
             return this;
         }
 
-        public MatPartItem.ItemBuilder props(Properties props){
+        public ItemBuilder props(Properties props){
             this.properties = props;
             return this;
         }
@@ -82,10 +69,6 @@ public class MatPartItem extends Item {
         public MatPartItem build(){
             this.id = this.material.getID() + "_" + this.part.getID();
             return new MatPartItem(this);
-        }
-
-        public String getId() {
-            return id;
         }
     }
 

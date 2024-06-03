@@ -18,22 +18,19 @@ import net.minecraftforge.registries.RegistryObject;
 public class ColorHandler {
 
     @SubscribeEvent
-
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.getItemColors().register(
                 (stack, tintIndex) -> {
                     if (stack.getItem() instanceof MatPartBlockItem) {
-                        return ((MatPartBlockItem) stack.getItem()).getItemColor(stack, tintIndex);
+                        return ((MatPartBlockItem) stack.getItem()).getMaterial().getRbg(tintIndex);
                     }
                     if (stack.getItem() instanceof MatPartItem){
-                        int rgb = ((MatPartItem) stack.getItem()).getMaterial().getRbg();
-                        return rgb;
+                        int rgb = ((MatPartItem) stack.getItem()).getMaterial().getRbg(tintIndex);
+                        return rgb; // TODO - Change
                     }
                     return 0xFFFFFF;
                 },
                 Register.MATERIAL_PART_ITEMS.stream().map(RegistryObject::get).toArray(Item[]::new)
         );
-
     }
-
 }

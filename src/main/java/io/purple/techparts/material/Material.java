@@ -11,7 +11,7 @@ public enum Material {
         VANILLA
      */
 
-    GOLD(255,250,242,94,"gold",SHINY), //0xffe650
+    GOLD(0xfdf55f,0xf25833,"gold",SHINY), //0xffe650
 
     /*
         CUTOFF of used Materials
@@ -276,37 +276,42 @@ public enum Material {
     /*
         LIQUIDS
      */
-    GLUE(255,255,255,255,"glue",NONE);
-    private final int alpha;
-    private final int red;
-    private final int blue;
-    private final int green;
+    GLUE(255,22, "glue",NONE);
+    private final int mainColor;
+    private final int secondColor;
+    private final int overlaycolor;
     private final String id;
     private final String name;
 
     private final Texture texture;
 
 
-    Material(int alpha, int red, int green, int blue, String id, Texture tex){
-        this(alpha,red,green,blue,id, tex,id.substring(0,1).toUpperCase() + id.substring(1).toLowerCase());
+    Material(int mainColor, int secondcolor, String id, Texture tex){
+        this(mainColor,secondcolor,id, tex,id.substring(0,1).toUpperCase() + id.substring(1).toLowerCase());
     }
 
-    Material(int alpha, int red, int green, int blue, String id, Texture tex, String name){
-        this.alpha = alpha;
-        this.red = red;
-        this.blue = blue;
-        this.green = green;
+    Material(int alpha, int red, String id, Texture tex, String name){
+        this.mainColor = alpha;
+        this.secondColor = red;
+        this.overlaycolor = 0x80404040;
         this.id = id;
         this.texture = tex;
         this.name = name;
     }
 
+    // TODO - How does GT do Tintindex > Also look at default color ?
 
-
-    public final int getRbg() {
-        int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;   // ARGB
-        //int argb = (red << 24) | (green << 16) | (blue << 8) | alpha; // RGBA instead of ARGB
-        return argb;
+    public final int getRbg(int tintindex) {
+        switch (tintindex) {
+            case 0:
+                return mainColor;
+            case 1:
+                return secondColor;
+            case 3:
+                return overlaycolor;
+            default:
+                return 0x80404040; // Might need to be changed to 0xFFFFFF
+        }
     }
 
     public String getName() {
@@ -318,7 +323,7 @@ public enum Material {
         return this.id;
     }
 
-    public String getTexture() {
-        return String.valueOf(texture);
+    public Texture getTexture() {
+        return this.texture;
     }
 }

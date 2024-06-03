@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static io.purple.techparts.TechParts.CREATIVE_MODE_TABS;
+import static io.purple.techparts.TechParts.LOGGER;
 
 
 public class Register {
@@ -55,10 +56,17 @@ public class Register {
 
     // Basic
     public static RegistryObject<BasicItem> registerBasicItem(BasicItem.ItemBuilder bitem) {
+        LOGGER.info("Creating BasicItems");
         RegistryObject<BasicItem> item = ITEMS.register(bitem.getId(),() -> new BasicItem(bitem));
         BASIC_ITEMS.add(item);
         return item;
     }
+
+    /* public static RegistryObject<BasicBlock> registerBasicBlock(BasicItem.ItemBuilder bitem) {
+        RegistryObject<BasicBlock> block = BLOCKS.register(bitem.getId(),() -> new BasicItem(bitem));
+        BASIC_BLOCKS.add(block);
+        return block;
+    } */ // TODO - Implement
 
 
     // Mat Part
@@ -77,8 +85,8 @@ public class Register {
             properties.noOcclusion();
         }
         RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getID()+"_"+part.getID(),() -> new MatPartBlock(material,part,properties));
-        MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getID()+ part.getID(),toReturn));
-        return null; // TODO - Implement
+        MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getID()+ "_" + part.getID(),toReturn));
+        return toReturn;
     }
 
     // Helper Methods
