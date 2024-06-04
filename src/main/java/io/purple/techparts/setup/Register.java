@@ -10,6 +10,7 @@ import io.purple.techparts.item.TechPartItems;
 import io.purple.techparts.material.MatDeclaration;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,6 +41,7 @@ public class Register {
 
     public static final Collection<RegistryObject<BasicItem>> BASIC_ITEMS = new ArrayList<>();
     public static final Collection<RegistryObject<BasicBlock>> BASIC_BLOCKS = new ArrayList<>();
+    public static final Collection<RegistryObject<BlockItem>> BASIC_BLOCKITEMS = new ArrayList<>();
 
     public static void registerInit(IEventBus modEventBus) {
         // Call up all MatPart Declarations
@@ -62,11 +64,20 @@ public class Register {
         return item;
     }
 
-    /* public static RegistryObject<BasicBlock> registerBasicBlock(BasicItem.ItemBuilder bitem) {
-        RegistryObject<BasicBlock> block = BLOCKS.register(bitem.getId(),() -> new BasicItem(bitem));
+    public static RegistryObject<BasicBlock> registerBasicBlock(BasicBlock.BlockBuilder bblock) {
+        // Create Block
+        RegistryObject<BasicBlock> block = BLOCKS.register(bblock.getId(),() -> new BasicBlock(bblock));
         BASIC_BLOCKS.add(block);
+        // Create BlockItem
+        BASIC_BLOCKITEMS.add(registerBasicBlockItem(bblock.getId(), block));
         return block;
-    } */ // TODO - Implement
+    }
+
+    public static<T extends BasicBlock> RegistryObject<BlockItem> registerBasicBlockItem(String id, RegistryObject<T> block){
+        RegistryObject<BlockItem> item =  ITEMS.register(id, () -> new BlockItem(block.get(),Register.baseItemProps()));
+        // FIXME - That Blockitem doesnt end up in BASIC_ITEMS at the moment
+        return item;
+    }
 
 
     // Mat Part
@@ -75,8 +86,8 @@ public class Register {
         return ITEMS.register(material.getID()+"_"+part.getID(),() -> new MatPartItem.ItemBuilder().mat(material).part(part).build());
     }
 
-    private static<T extends MatPartBlock> RegistryObject<MatPartBlockItem> registerMatPartBlockItem(String name, RegistryObject<T> block){
-        return ITEMS.register(name, ()->new MatPartBlockItem(block.get(), baseItemProps()));
+    private static<T extends MatPartBlock> RegistryObject<MatPartBlockItem> registerMatPartBlockItem(String id, RegistryObject<T> block){
+        return ITEMS.register(id, ()->new MatPartBlockItem(block.get(), baseItemProps()));
     }
 
     public static RegistryObject<MatPartBlock> registerMatPartBlock(Material material, Parts part) {
@@ -84,7 +95,7 @@ public class Register {
         if(part == Parts.FRAME){
             properties.noOcclusion();
         }
-        RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getID()+"_"+part.getID(),() -> new MatPartBlock(material,part,properties));
+        RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getID()+"_"+part.getID(),() -> new MatPartBlock.BlockBuilder().mat(material).part(part).props(properties).build());
         MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getID()+ "_" + part.getID(),toReturn));
         return toReturn;
     }

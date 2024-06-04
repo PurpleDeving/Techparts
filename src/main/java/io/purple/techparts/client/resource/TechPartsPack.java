@@ -87,30 +87,28 @@ public class TechPartsPack implements PackResources {
         }
 
         for (RegistryObject<BasicBlock> entry : BASIC_BLOCKS) {
+            String blockID = entry.get().getId();
+            String path = entry.get().getTexPath();
             // FIXME - Translation name is broken
 
-            LOGGER.info("267 - Initiate Sapphire Block");
-
-            String blockID = entry.getId().getPath();
-
-            translatables.put(String.format("block.%s.%s", REF.ID, blockID), "Sapphire Block"); //TODO - Exchange for final Name Reference
+            translatables.put(String.format("block.%s.%s", REF.ID, blockID), entry.get().getClearName()); //TODO - Exchange for final Name Reference
 
             ResourceLocation blockstate = new ResourceLocation(REF.ID, "blockstates/" + blockID + ".json");
-            ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/block/" + blockID + ".json");
+            ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/block/basic/" + blockID + ".json");
             ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + blockID + ".json");
 
-            String blockstateJson = generateBlockstatesJson(blockID);
-            String blockModelJson = generateBlockModelJson(blockID);
-            String itemModelJson = generateBlockItemModelJson(blockID);
+            String blockstateJson = generateBlockstatesJson(path); // Path to Block Model
+            String blockModelJson = generateBlockModelJson(path);     // Path to texture
+            String itemModelJson = generateBlockItemModelJson(path);  // Path to texture
 
-            LOGGER.info("Blockstate JSON 267: " + blockstateJson);
+            /*LOGGER.info("Blockstate JSON 266: " + blockstateJson);
             LOGGER.info("Block model JSON: " + blockModelJson);
             LOGGER.info("Item model JSON: " + itemModelJson);
 
 
             LOGGER.info("Blockstate path: " + blockstate);
             LOGGER.info("Block model path: " + blockModel);
-            LOGGER.info("Item model path: " + itemModel);
+            LOGGER.info("Item model path: " + itemModel);*/
 
             resourceMap.put(blockstate, ofText(blockstateJson));
             resourceMap.put(blockModel, ofText(blockModelJson));
@@ -121,49 +119,30 @@ public class TechPartsPack implements PackResources {
             String blockID = entry.get().getId();
             String path = entry.get().getTexPath();
 
-            translatables.put(String.format("block.%s.%s", REF.ID, blockID), "Sapphire Block"); //TODO - Exchange for final Name Reference
+            //translatables.put(String.format("block.%s.%s", REF.ID, blockID), "Sapphire Block"); //TODO - Exchange for final Name Reference
 
             ResourceLocation blockstate = new ResourceLocation(REF.ID, "blockstates/" + blockID + ".json");
-            ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/block/" + blockID + ".json");
+            ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/" + path + ".json");
             ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + blockID + ".json");
 
-            String blockstateJson = generateBlockstatesJson(blockID); // Path to Block Model
+            String blockstateJson = generateBlockstatesJson(path); // Path to Block Model
             String blockModelJson = generateBlockModelJson(path); // Path to Texture
             String itemModelJson = generateBlockItemModelJson(path); // Path to Texture
-
-            LOGGER.info(path);
-
-            LOGGER.info("Blockstate JSON 266: " + blockstateJson);
+/*            LOGGER.info("Blockstate JSON 296: " + blockstateJson);
             LOGGER.info("Block model JSON: " + blockModelJson);
             LOGGER.info("Item model JSON: " + itemModelJson);
 
 
             LOGGER.info("Blockstate path: " + blockstate);
             LOGGER.info("Block model path: " + blockModel);
-            LOGGER.info("Item model path: " + itemModel);
+            LOGGER.info("Item model path: " + itemModel); */
 
             resourceMap.put(blockstate, ofText(blockstateJson));
             resourceMap.put(blockModel, ofText(blockModelJson));
             resourceMap.put(itemModel, ofText(itemModelJson));
         }
+        /**/
 
-        //ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/sapphire.json");
-        //resourceMap.put(itemModel, ofText("{\"parent\":\"item/generated\",\"textures\":{\"layer0\":\"techparts:item/sapphire\"}}"));
-
-        // Example: Adding a simple block model
-
-        ResourceLocation blockModel = new ResourceLocation(REF.ID, String.format("models/block/%s.json","sapphire_block"));
-        //resourceMap.put(blockModel, ofText(String.format("{\"parent\":\"block/cube_all\",\"textures\":{\"all\":\"%s:block/%s\"}}",REF.ID,"sapphire_block")));
-
-        // Example: Adding a block item model
-        //ResourceLocation blockItemModel = new ResourceLocation(REF.ID, "models/item/sapphire_block.json");
-        //String blockItemModelJson = generateBlockItemModelJson("techparts:block/sapphire_block");
-        //resourceMap.put(blockItemModel, ofText(blockItemModelJson));
-
-        // Example: Adding a blockstates JSON for sapphire_block
-        //ResourceLocation blockstatesModel = new ResourceLocation(REF.ID, "blockstates/sapphire_block.json");
-        //String blockstatesJson = generateBlockstatesJson("techparts:block/sapphire_block");
-        //resourceMap.put(blockstatesModel, ofText(blockstatesJson));
 
 
         // Example: Adding translations
@@ -211,7 +190,7 @@ public class TechPartsPack implements PackResources {
         return "{\n" +
                 "  \"variants\": {\n" +
                 "    \"\": {\n" +
-                "      \"model\": \"" +REF.ID + ":block/" + modelPath + "\"\n" +
+                "      \"model\": \"" +REF.ID + ":" + modelPath + "\"\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
@@ -219,7 +198,7 @@ public class TechPartsPack implements PackResources {
 
     private String generateBlockItemModelJson(String texturePath) {
         return "{\n" +
-                "  \"parent\": \"" + REF.ID + ":block/" + texturePath + "\"\n}";
+                "  \"parent\": \"" + REF.ID + ":" + texturePath + "\"\n}";
     }
 
     /*private String generateBlockItemModelJson(String texturePath) {
@@ -239,7 +218,7 @@ public class TechPartsPack implements PackResources {
         return "{\n" +
                 "  \"parent\": \"block/cube_all\",\n" +
                 "  \"textures\": {\n" +
-                "    \"all\": \"" + REF.ID + ":block/" + path + "\"\n" +
+                "    \"all\": \"" + REF.ID + ":" + path + "\"\n" +
                 "  }\n" +
                 "}";
     }

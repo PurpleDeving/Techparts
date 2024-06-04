@@ -1,6 +1,7 @@
 package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
+import io.purple.techparts.block.BasicBlock;
 import io.purple.techparts.block.MatPartBlockItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.client.resource.ResourcePackAdapter;
@@ -44,10 +45,6 @@ public class TechParts {
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, REF.ID);
 
-    // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
-    public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("sapphire_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-    // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
-    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("sapphire_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
 
 
 
@@ -99,13 +96,17 @@ public class TechParts {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-            event.accept(EXAMPLE_BLOCK_ITEM);
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS){
+
+        }
         for (RegistryObject<MatPartItem> matPartItem : MATERIAL_PART_ITEMS){
             event.accept(matPartItem);
         };
         for (RegistryObject<MatPartBlockItem> matPartBlockItem : MATERIAL_PART_BLOCKITEMS){
             event.accept(matPartBlockItem);
+        }
+        for (RegistryObject<BlockItem> blockitem : BASIC_BLOCKITEMS){
+            event.accept(blockitem);
         }
     }
 

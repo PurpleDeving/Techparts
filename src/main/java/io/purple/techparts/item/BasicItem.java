@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class BasicItem extends Item {
 
 
-    private final String id;
+    private String id;
     private final String tooltip;
     private final String name;
 
@@ -36,12 +36,6 @@ public class BasicItem extends Item {
     // Helper Method
 
     private String fixname(String name) {
-        if (id == null | id == "" ){
-            TechParts.LOGGER.info("274 - fixname DEBBUG");
-            TechParts.LOGGER.info(this.id);
-            TechParts.LOGGER.info(this.name);
-            TechParts.LOGGER.info(String.valueOf(this));
-        }
         if (name == null) {
             String temp = id.substring(0, 1).toUpperCase() + id.substring(1).toLowerCase();
             temp = temp.replaceAll("_", " ");
@@ -54,13 +48,10 @@ public class BasicItem extends Item {
         }
     }
 
-    public interface NameStep {
-        ItemBuilder id(String id);
-    }
 
     // Basic Item Builder
 
-    public static class ItemBuilder<T extends ItemBuilder<T>> implements NameStep{
+    public static class ItemBuilder<T extends ItemBuilder<T>>{
         private Properties properties = Register.baseItemProps();
         private String tooltip;
         private String name;
