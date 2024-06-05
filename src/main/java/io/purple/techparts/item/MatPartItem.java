@@ -13,7 +13,7 @@ public class MatPartItem extends BasicItem implements MatPartCombo {
     private final Material material;
     private final Parts part;
 
-    public MatPartItem(ItemBuilder bitem) {
+    private MatPartItem(ItemBuilder bitem) {
         super(bitem);
         this.material = bitem.material;
         this.part = bitem.part;

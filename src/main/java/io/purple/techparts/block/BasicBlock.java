@@ -70,22 +70,22 @@ public class BasicBlock extends Block {
         private String id;
         private BlockItem blockItem;
 
-        public BlockBuilder tip(String tip){
+        public T tip(String tip){
             this.tooltip = tip;
-            return this;
+            return (T) this;
         }
-        public BlockBuilder name(String name){
+        public T name(String name){
             this.name = name;
-            return this;
+            return (T) this;
         }
-        public BlockBuilder id(String id){
+        public T id(String id){
             this.id = id;
-            return this;
+            return (T) this;
         }
 
-        public BlockBuilder props(BlockBehaviour.Properties props){
+        public T props(BlockBehaviour.Properties props){
             this.properties = props;
-            return this;
+            return (T) this;
         }
 
         public BasicBlock build(){

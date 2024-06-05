@@ -1,7 +1,6 @@
 package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
-import io.purple.techparts.block.BasicBlock;
 import io.purple.techparts.block.MatPartBlockItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.client.resource.ResourcePackAdapter;
@@ -11,11 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -31,7 +26,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-import io.purple.techparts.client.resource.TechPartsPack;
+import io.purple.techparts.pack.TechPartsPack;
 
 import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 import static io.purple.techparts.setup.Register.*;
@@ -39,6 +34,9 @@ import static io.purple.techparts.setup.Register.*;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(REF.ID)
 public class TechParts {
+
+    // TODO - Items currently end up in all creative mode tabs. Not good
+
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 

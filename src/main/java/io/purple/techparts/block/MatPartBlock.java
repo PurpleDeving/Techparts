@@ -39,7 +39,7 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
     public String getTooltip() {
         return "";
     }
-    public static class BlockBuilder extends BasicBlock.BlockBuilder {
+    public static class BlockBuilder extends BasicBlock.BlockBuilder<BlockBuilder> {
 
         Material material;
         Parts part;
@@ -54,6 +54,7 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
             return this;
         }
 
+        @Override
         public MatPartBlock build(){
             this.id(material.getID() + "_" + this.part.getID());
             return new MatPartBlock(this);

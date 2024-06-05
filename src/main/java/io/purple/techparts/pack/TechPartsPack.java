@@ -1,4 +1,4 @@
-package io.purple.techparts.client.resource;
+package io.purple.techparts.pack;
 
 import com.google.gson.JsonObject;
 import io.purple.techparts.REF;
@@ -29,6 +29,7 @@ import static io.purple.techparts.setup.Register.*;
 public class TechPartsPack implements PackResources {
 
     public final Map<ResourceLocation, IResourceStreamSupplier> resourceMap = new HashMap<>();
+    public final Map<String,ArrayList<String>> tagMap = new HashMap<>();
 
     // Singleton instance
     static TechPartsPack packInstance;
@@ -117,25 +118,41 @@ public class TechPartsPack implements PackResources {
 
         for (RegistryObject<MatPartBlock> entry : MATERIAL_PART_BLOCKS){
             String blockID = entry.get().getId();
-            String path = entry.get().getTexPath();
+            String path = entry.get().getTexPath(); //Path here leads to the texutre, meaning the identifier is part.getID()
+            Parts parts = entry.get().getPart();
 
-            //translatables.put(String.format("block.%s.%s", REF.ID, blockID), "Sapphire Block"); //TODO - Exchange for final Name Reference
+            // TODO - Check if this runs into problems if 2 materias share the same shiny path
+
+            translatables.put(String.format("block.%s.%s", REF.ID, blockID), entry.get().getClearName()); //TODO - Exchange for final Name Reference
+
+            // ADD Tags
+            Tags.MINEABLEPICK.addItem(entry.get().getId());
+            if(parts == Parts.FRAME){
+                Tags.CLIMBABLE.addItem(entry.get().getId());
+            }
+
 
             ResourceLocation blockstate = new ResourceLocation(REF.ID, "blockstates/" + blockID + ".json");
             ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/" + path + ".json");
             ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + blockID + ".json");
 
             String blockstateJson = generateBlockstatesJson(path); // Path to Block Model
-            String blockModelJson = generateBlockModelJson(path); // Path to Texture
+            String blockModelJson = "";
+            if(entry.get().getPart() == Parts.FRAME){
+                blockModelJson = generateFrameModelJson(path); // Path to Texture
+            }
+            else {
+                blockModelJson = generateBlockModelJson(path); // Path to Texture
+            }
             String itemModelJson = generateBlockItemModelJson(path); // Path to Texture
-/*            LOGGER.info("Blockstate JSON 296: " + blockstateJson);
+            LOGGER.info("Blockstate JSON 296: " + blockstateJson);
             LOGGER.info("Block model JSON: " + blockModelJson);
             LOGGER.info("Item model JSON: " + itemModelJson);
 
 
             LOGGER.info("Blockstate path: " + blockstate);
             LOGGER.info("Block model path: " + blockModel);
-            LOGGER.info("Item model path: " + itemModel); */
+            LOGGER.info("Item model path: " + itemModel);
 
             resourceMap.put(blockstate, ofText(blockstateJson));
             resourceMap.put(blockModel, ofText(blockModelJson));
@@ -144,18 +161,61 @@ public class TechPartsPack implements PackResources {
         /**/
 
 
+        // Adding Tags
+        for(Tags tag : Tags.values()){
+            ResourceLocation tagfile = new ResourceLocation(tag.getRlLoc(),tag.getPath());
+            String tagJson = generateTagJson(tag.getEntries());
+            LOGGER.info("257" + tagJson + "\n");
+            resourceMap.put(tagfile, ofText(tagJson));
+        }
 
-        // Example: Adding translations
+        // Adding Translations
         ResourceLocation langFile = new ResourceLocation(REF.ID, "lang/en_us.json");
         String langJson = generateLangJson(translatables);
         resourceMap.put(langFile, ofText(langJson));
     }
+
+
 
     private static IResourceStreamSupplier ofText(String text) {
 
         return IResourceStreamSupplier.create(() -> true, () -> new ByteArrayInputStream(text.getBytes()));
 
     }
+
+    /*******************************************************
+     *
+     *  Block and Item Tags
+     *
+     *****************************************************/
+
+    private String generateTagJson(List<String> entries) {
+        StringBuilder tagString = new StringBuilder("{\n");
+        tagString.append("  \"replace\": false,\n")
+                 .append("  \"values\": [\n");
+        for (String entry: entries){
+            tagString.append("    \"")
+                    .append(entry)
+                    .append("\",\n");
+        }
+        if (!entries.isEmpty()) {
+            tagString.setLength(tagString.length() - 2);
+        }
+        tagString.append("\n  ]\n")
+                 .append("}");
+        tagString.append("");
+
+
+        return tagString.toString();
+    }
+
+
+    /*******************************************************
+     *
+     *  Translation Keys
+     *
+     *****************************************************/
+
 
     private String generateLangJson(Map<String, String> translatables) {
         StringBuilder translateString = new StringBuilder("{\n");
@@ -175,6 +235,12 @@ public class TechPartsPack implements PackResources {
         translateString.append("\n}");
         return translateString.toString();
     }
+
+    /*******************************************************
+     *
+     *  Block and Item Models
+     *
+     *****************************************************/
 
 
     private String generateItemModelJson(String path) {
@@ -201,17 +267,6 @@ public class TechPartsPack implements PackResources {
                 "  \"parent\": \"" + REF.ID + ":" + texturePath + "\"\n}";
     }
 
-    /*private String generateBlockItemModelJson(String texturePath) {
-        return "{\n" +
-                "  \"parent\": \"block/cube_all\",\n" +
-                "  \"textures\": {\n" +
-                "    \"all\": \"" + texturePath + "\"\n" +
-                "  }\n" +
-                "}";
-    } */
-
-    //ResourceLocation blockModel = new ResourceLocation(REF.ID, String.format("models/block/%s.json","sapphire_block"));
-    //resourceMap.put(blockModel, ofText(String.format("{\"parent\":\"block/cube_all\",\"textures\":{\"all\":\"%s:block/%s\"}}",REF.ID,"sapphire_block")));
 
 
     private String generateBlockModelJson(String path) {
@@ -222,6 +277,18 @@ public class TechPartsPack implements PackResources {
                 "  }\n" +
                 "}";
     }
+
+    public String generateFrameModelJson(String path) {
+        return "{\"parent\":\"minecraft:block/cube_all\",\"textures\":{\"all\":\"" +
+                REF.ID+ ":" +path +  "\",\"particle\":\"#all\"},\"elements\":[{\"from\":[0,0,0],\"to\":[16,16,16],\"faces\":{\"down\":{\"texture\":\"#all\",\"cullface\":\"down\",\"tintindex\":0},\"up\":{\"texture\":\"#all\",\"cullface\":\"up\",\"tintindex\":0},\"north\":{\"texture\":\"#all\",\"cullface\":\"north\",\"tintindex\":0},\"south\":{\"texture\":\"#all\",\"cullface\":\"south\",\"tintindex\":0},\"west\":{\"texture\":\"#all\",\"cullface\":\"west\",\"tintindex\":0},\"east\":{\"texture\":\"#all\",\"cullface\":\"east\",\"tintindex\":0}}},{\"from\":[15.984375,15.984375,15.984375],\"to\":[0.015625,0.015625,0.015625],\"faces\":{\"down\":{\"texture\":\"#all\",\"uv\":[0.0,0.0,16.0,16.0],\"tintindex\":0},\"up\":{\"texture\":\"#all\",\"uv\":[0.0,0.0,16.0,16.0],\"tintindex\":0},\"north\":{\"texture\":\"#all\",\"uv\":[0.0,0.0,16.0,16.0],\"tintindex\":0},\"south\":{\"texture\":\"#all\",\"uv\":[0.0,0.0,16.0,16.0],\"tintindex\":0},\"west\":{\"texture\":\"#all\",\"uv\":[0.0,0.0,16.0,16.0],\"tintindex\":0},\"east\":{\"texture\":\"#all\",\"uv\":[0.0,0.0,16.0,16.0],\"tintindex\":0}}}]}";
+    }
+
+
+    /*******************************************************
+     *
+     *  RessourcePack Setup
+     *
+     *****************************************************/
 
     @Override
     public void close() {

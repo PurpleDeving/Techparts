@@ -1,6 +1,7 @@
 package io.purple.techparts.setup;
 
 import io.purple.techparts.REF;
+import io.purple.techparts.TechParts;
 import io.purple.techparts.block.BasicBlock;
 import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.block.MatPartBlockItem;
@@ -10,11 +11,14 @@ import io.purple.techparts.item.TechPartItems;
 import io.purple.techparts.material.MatDeclaration;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -75,7 +79,6 @@ public class Register {
 
     public static<T extends BasicBlock> RegistryObject<BlockItem> registerBasicBlockItem(String id, RegistryObject<T> block){
         RegistryObject<BlockItem> item =  ITEMS.register(id, () -> new BlockItem(block.get(),Register.baseItemProps()));
-        // FIXME - That Blockitem doesnt end up in BASIC_ITEMS at the moment
         return item;
     }
 
@@ -90,10 +93,12 @@ public class Register {
         return ITEMS.register(id, ()->new MatPartBlockItem(block.get(), baseItemProps()));
     }
 
+    // Also provides custom things to all MatPartBlocks that dont need a seperate class
     public static RegistryObject<MatPartBlock> registerMatPartBlock(Material material, Parts part) {
         BlockBehaviour.Properties properties = Register.baseBlockProps();
         if(part == Parts.FRAME){
             properties.noOcclusion();
+            properties.noCollission();
         }
         RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getID()+"_"+part.getID(),() -> new MatPartBlock.BlockBuilder().mat(material).part(part).props(properties).build());
         MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getID()+ "_" + part.getID(),toReturn));
