@@ -1,4 +1,4 @@
-package io.purple.techparts.pack;
+package io.purple.techparts.setup;
 
 import io.purple.techparts.REF;
 

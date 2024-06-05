@@ -40,9 +40,9 @@ public class MatDeclaration{
 
         //Vanilla needs to Exclude existing parts
         createMaterialGroupExcludeGroup(GOLD,all,vanillaMetals);
+        createMaterialGroupExcludeSingles(COPPER,all,INGOT,ORE_RAW,BLOCK); //Not ExcludeGroup vanillaMetals, because there is no vanilla Copper Nugget
         /*createMaterialGroupExcludeGroup(IRON,all,vanillaMetals);
         createMaterialGroupExcludeSingles(GLOWSTONE,all,DUST,BLOCK);
-        createMaterialGroupExcludeSingles(COPPER,all,INGOT,ORE_RAW,BLOCK); //Not ExcludeGroup vanillaMetals, because there is no vanilla Copper Nugget
         createMaterialGroupExcludeSingles(REDSTONE,ores);
         createMaterialGroupAddSingles(CHARCOAL,dustsandores,BLOCK,PLATE);
         createMaterialGroupAddSingles(COAL,dustsandores,BLOCK,PLATE);

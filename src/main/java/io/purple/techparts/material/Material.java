@@ -12,7 +12,7 @@ public enum Material {
      */
 
     GOLD(0xfdf55f,0xf25833,"gold",SHINY), //0xffe650
-
+    COPPER(0xB87333,0xB87333,"copper", SHINY),
     /*
         CUTOFF of used Materials
 
@@ -22,7 +22,7 @@ public enum Material {
     IRON(0xa19d94,"iron",METALLIC),
     COAL(0x131212,"coal",LIGNITE),
     QUARTZ(0xffffff,"quartz",Texture.QUARTZ),
-    COPPER(0xB87333,"copper", SHINY),
+
     REDSTONE(0xB87333,"redstone", SHINY),
     NETHERITE(0x353935,"netherite", LIGNITE), //TODO: Does Lignite have the needed texture ?*/
 

@@ -1,7 +1,6 @@
 package io.purple.techparts.setup;
 
 import io.purple.techparts.REF;
-import io.purple.techparts.TechParts;
 import io.purple.techparts.block.BasicBlock;
 import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.block.MatPartBlockItem;
@@ -11,14 +10,15 @@ import io.purple.techparts.item.TechPartItems;
 import io.purple.techparts.material.MatDeclaration;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -27,8 +27,8 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static io.purple.techparts.TechParts.CREATIVE_MODE_TABS;
 import static io.purple.techparts.TechParts.LOGGER;
+import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 
 
 public class Register {
@@ -47,10 +47,23 @@ public class Register {
     public static final Collection<RegistryObject<BasicBlock>> BASIC_BLOCKS = new ArrayList<>();
     public static final Collection<RegistryObject<BlockItem>> BASIC_BLOCKITEMS = new ArrayList<>();
 
+    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the REF.ID namespace
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, REF.ID);
+
+    // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
+    public static final RegistryObject<CreativeModeTab> TECHPARTS_TAB = CREATIVE_MODE_TABS.register("techparts_tab", () -> CreativeModeTab.builder()
+            .withTabsBefore(CreativeModeTabs.COMBAT)
+            .title(Component.translatable("creativetab.techparts_tab"))
+            .icon(() -> SAPPHIRE.get().getDefaultInstance())
+            .displayItems((parameters, output) -> {
+                output.accept(SAPPHIRE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+            }).build());
+
     public static void registerInit(IEventBus modEventBus) {
         // Call up all MatPart Declarations
         MatDeclaration.init();
         TechPartItems.init();
+
         // Register the Deferred Register to the mod event bus so blocks get registered
         BLOCKS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
@@ -59,8 +72,20 @@ public class Register {
         CREATIVE_MODE_TABS.register(modEventBus);
     }
 
+    /*******************************************************
+     *
+     *  Creative Tab
+     *
+     *****************************************************/
+    private static void createCreativeTab() {
 
-    // Basic
+    }
+
+    /*******************************************************
+     *
+     *  Basic
+     *
+     *****************************************************/
     public static RegistryObject<BasicItem> registerBasicItem(BasicItem.ItemBuilder bitem) {
         LOGGER.info("Creating BasicItems");
         RegistryObject<BasicItem> item = ITEMS.register(bitem.getId(),() -> new BasicItem(bitem));
@@ -77,13 +102,17 @@ public class Register {
         return block;
     }
 
-    public static<T extends BasicBlock> RegistryObject<BlockItem> registerBasicBlockItem(String id, RegistryObject<T> block){
+    private static<T extends BasicBlock> RegistryObject<BlockItem> registerBasicBlockItem(String id, RegistryObject<T> block){
         RegistryObject<BlockItem> item =  ITEMS.register(id, () -> new BlockItem(block.get(),Register.baseItemProps()));
         return item;
     }
 
 
-    // Mat Part
+    /*******************************************************
+     *
+     *  MatPartCombo Elements
+     *
+     *****************************************************/
 
     public static RegistryObject<MatPartItem> registerMatPartItem(Material material, Parts part) {
         return ITEMS.register(material.getID()+"_"+part.getID(),() -> new MatPartItem.ItemBuilder().mat(material).part(part).build());
@@ -98,14 +127,17 @@ public class Register {
         BlockBehaviour.Properties properties = Register.baseBlockProps();
         if(part == Parts.FRAME){
             properties.noOcclusion();
-            properties.noCollission();
         }
         RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getID()+"_"+part.getID(),() -> new MatPartBlock.BlockBuilder().mat(material).part(part).props(properties).build());
         MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getID()+ "_" + part.getID(),toReturn));
         return toReturn;
     }
 
-    // Helper Methods
+    /*******************************************************
+     *
+     *  Helper Methods
+     *
+     *****************************************************/
 
     public static BlockBehaviour.Properties baseBlockProps() {
         return BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK);

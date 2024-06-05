@@ -11,6 +11,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -26,7 +27,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-import io.purple.techparts.pack.TechPartsPack;
+import io.purple.techparts.setup.TechPartsPack;
 
 import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 import static io.purple.techparts.setup.Register.*;
@@ -35,24 +36,15 @@ import static io.purple.techparts.setup.Register.*;
 @Mod(REF.ID)
 public class TechParts {
 
-    // TODO - Items currently end up in all creative mode tabs. Not good
-
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, REF.ID);
 
 
 
 
-    // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
-    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> SAPPHIRE.get().getDefaultInstance())
-            .displayItems((parameters, output) -> {
-                output.accept(SAPPHIRE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
-            }).build());
+
+
 
     public TechParts() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -94,37 +86,35 @@ public class TechParts {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS){
+       if (event.getTabKey() == TECHPARTS_TAB.getKey()){
+           LOGGER.info("257 Test");
+           for (RegistryObject<MatPartItem> matPartItem : MATERIAL_PART_ITEMS){
+               event.accept(matPartItem);
+           };
+           for (RegistryObject<MatPartBlockItem> matPartBlockItem : MATERIAL_PART_BLOCKITEMS){
+               event.accept(matPartBlockItem);
+           }
+           for (RegistryObject<BlockItem> blockitem : BASIC_BLOCKITEMS){
+               event.accept(blockitem);
+           }
+       }
 
-        }
-        for (RegistryObject<MatPartItem> matPartItem : MATERIAL_PART_ITEMS){
-            event.accept(matPartItem);
-        };
-        for (RegistryObject<MatPartBlockItem> matPartBlockItem : MATERIAL_PART_BLOCKITEMS){
-            event.accept(matPartBlockItem);
-        }
-        for (RegistryObject<BlockItem> blockitem : BASIC_BLOCKITEMS){
-            event.accept(blockitem);
-        }
+     /*    }
+*/
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        // Enable this to allow Ladder climbing on Frames etc.
+        ForgeConfig.SERVER.fullBoundingBoxLadders.set(true);
     }
 
-    /*// You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = REF.ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {*/
-        @SubscribeEvent
-        public /*static*/ void onClientSetup(FMLClientSetupEvent event) {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+    @SubscribeEvent
+    public /*static*/ void onClientSetup(FMLClientSetupEvent event) {
+        // Some client setup code
+        LOGGER.info("HELLO FROM CLIENT SETUP");
+        LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
-            // Register block color handlers
-        }
-    //}
+    }
 }

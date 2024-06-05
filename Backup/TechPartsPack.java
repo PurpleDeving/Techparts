@@ -1,4 +1,4 @@
-package io.purple.techparts.pack;
+package io.purple.techparts.setup;
 
 import com.google.gson.JsonObject;
 import io.purple.techparts.REF;
@@ -165,7 +165,6 @@ public class TechPartsPack implements PackResources {
         for(Tags tag : Tags.values()){
             ResourceLocation tagfile = new ResourceLocation(tag.getRlLoc(),tag.getPath());
             String tagJson = generateTagJson(tag.getEntries());
-            LOGGER.info("257" + tagJson + "\n");
             resourceMap.put(tagfile, ofText(tagJson));
         }
 
