@@ -33,6 +33,9 @@ public class MatDeclaration{
         EnumSet<Parts> gem = EnumSet.of(Parts.GEM,Parts.LENS);
         EnumSet<Parts> all = EnumSet.allOf(Parts.class);
 
+        // TODO - Check how I can have the same Material with different textures ? Mayve cioy the material enums ?
+        // TODO - Why the fuck does RADIOACTIVE has a Gem secondary but no GEM ?
+
     /*
         Material Sets
      */

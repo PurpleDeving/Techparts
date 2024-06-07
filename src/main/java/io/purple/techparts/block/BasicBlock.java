@@ -35,7 +35,6 @@ public class BasicBlock extends Block {
         return String.join("", "block/basic/",getId());
     }
 
-    // TODO - Idk yet what to do with this
     public String getClearName() {
         return name;
     }
@@ -47,8 +46,6 @@ public class BasicBlock extends Block {
     // Helper Method
 
     private String fixname(String name) {
-        TechParts.LOGGER.info("289-1" + id);
-        TechParts.LOGGER.info(name);
         if (name == null) {
             String temp = id.substring(0, 1).toUpperCase() + id.substring(1).toLowerCase();
             temp = temp.replaceAll("_", " ");

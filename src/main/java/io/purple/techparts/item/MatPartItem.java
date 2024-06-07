@@ -29,7 +29,7 @@ public class MatPartItem extends BasicItem implements MatPartCombo {
 
     @Override
     public String getTexPath() {
-        return String.join("","item/",getMaterial().getTexture().getID(),"/",part.getID()); // TODO - Fucked the bird ?
+        return String.join("",getMaterial().getTexture().getID(),"/",part.getID()); // TODO - Fucked the bird ?
     }
 
     public static class ItemBuilder extends BasicItem.ItemBuilder {

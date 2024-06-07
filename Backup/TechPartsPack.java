@@ -8,6 +8,7 @@ import io.purple.techparts.item.BasicItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
+import io.purple.techparts.material.Texture;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
 import static io.purple.techparts.TechParts.LOGGER;
 import static io.purple.techparts.setup.Register.*;
@@ -55,22 +57,13 @@ public class TechPartsPack implements PackResources {
 
         Map<String, String> translatables = new HashMap<>();
 
-        // TODO - Make the overlap smaller - They do basically the same thing
 
+        /*******************************************************
+         *
+         *  BASIC
+         *
+         *****************************************************/
 
-        for (RegistryObject<MatPartItem> entry : MATERIAL_PART_ITEMS){
-            MatPartItem item = entry.get();
-            String name = item.getName();
-            String id = item.getId();
-            Material mat = item.getMaterial();
-            String tex = mat.getTexture().getID();
-            Parts part = item.getPart();
-
-            translatables.put(String.format("item.%s.%s", REF.ID, id), name);
-            ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + id + ".json");
-            String itemModelJson = generateItemModelJson("material/" + tex + "/" + part.getID());
-            resourceMap.put(itemModel, ofText(itemModelJson));
-        }
 
         for (RegistryObject<BasicItem> entry : BASIC_ITEMS) {
             BasicItem item = entry.get();
@@ -98,32 +91,69 @@ public class TechPartsPack implements PackResources {
             ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/block/basic/" + blockID + ".json");
             ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + blockID + ".json");
 
+            // No reduction like for the MAT Blocks because there should be no basic block thats sharing a base texture with another,
+            // and if then it's a rare case with no consequences
             String blockstateJson = generateBlockstatesJson(path); // Path to Block Model
             String blockModelJson = generateBlockModelJson(path);     // Path to texture
             String itemModelJson = generateBlockItemModelJson(path);  // Path to texture
-
-            /*LOGGER.info("Blockstate JSON 266: " + blockstateJson);
-            LOGGER.info("Block model JSON: " + blockModelJson);
-            LOGGER.info("Item model JSON: " + itemModelJson);
-
-
-            LOGGER.info("Blockstate path: " + blockstate);
-            LOGGER.info("Block model path: " + blockModel);
-            LOGGER.info("Item model path: " + itemModel);*/
 
             resourceMap.put(blockstate, ofText(blockstateJson));
             resourceMap.put(blockModel, ofText(blockModelJson));
             resourceMap.put(itemModel, ofText(itemModelJson));
         }
 
+        for (RegistryObject<MatPartItem> entry : MATERIAL_PART_ITEMS){
+            String path = entry.get().getTexPath();
+            String itemId = entry.get().getId();
+
+            translatables.put(String.format("item.%s.%s", REF.ID, itemId), entry.get().getName());
+            ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + itemId + ".json");
+            String itemModelJson = generateItemModelJson("material/" + path);
+            LOGGER.info("234" + itemModelJson);
+
+            resourceMap.put(itemModel, ofText(itemModelJson));
+        }
+
+        /*******************************************************
+         *
+         *  Material Part Block - 3 Step Flow because many Blocks share same jsons
+         *
+         *****************************************************/
+
+        // Step 1: Filter the MATERIAL_PART_BLOCKS to get uniqgue combinations of textures and parts
+        Set<String> uniquePaths = MATERIAL_PART_BLOCKS.stream()
+                .map(entry -> entry.get().getTexPath())
+                .collect(Collectors.toSet());
+
+        for (String entry: uniquePaths){
+            LOGGER.info("243" + entry);
+        }
+
+        // Step 2: Precompute JSON strings and ResourceLocation paths for the filtered combinations
+        Map<String, String> blockstateJsonMap = new HashMap<>();
+        Map<String, String> blockModelJsonMap = new HashMap<>();
+        Map<String, String> itemModelJsonMap = new HashMap<>();
+
+        for (String path : uniquePaths) {
+            String blockstateJson = generateBlockstatesJson(path);
+            String blockModelJson = path.contains("frame") ? generateFrameModelJson(path) : generateBlockModelJson(path);
+            String itemModelJson = generateBlockItemModelJson(path);
+
+            blockstateJsonMap.put(path, blockstateJson);
+            blockModelJsonMap.put(path, blockModelJson);
+            itemModelJsonMap.put(path, itemModelJson);
+
+            // Since the BlockModel Json and its location are only dependent on path, they can created with just the texture + path combination
+            resourceMap.put(new ResourceLocation(REF.ID, "models/" + path + ".json"), ofText(blockModelJson));
+        }
+
+        // Step 3: Add put
         for (RegistryObject<MatPartBlock> entry : MATERIAL_PART_BLOCKS){
             String blockID = entry.get().getId();
-            String path = entry.get().getTexPath(); //Path here leads to the texutre, meaning the identifier is part.getID()
+            String path = entry.get().getTexPath(); //Path here leads to the Texture + Part combination from Step 1 and 2
             Parts parts = entry.get().getPart();
 
-            // TODO - Check if this runs into problems if 2 materias share the same shiny path
-
-            translatables.put(String.format("block.%s.%s", REF.ID, blockID), entry.get().getClearName()); //TODO - Exchange for final Name Reference
+            translatables.put(String.format("block.%s.%s", REF.ID, blockID), entry.get().getClearName());
 
             // ADD Tags
             Tags.MINEABLEPICK.addItem(entry.get().getId());
@@ -131,34 +161,17 @@ public class TechPartsPack implements PackResources {
                 Tags.CLIMBABLE.addItem(entry.get().getId());
             }
 
+            // Models
 
             ResourceLocation blockstate = new ResourceLocation(REF.ID, "blockstates/" + blockID + ".json");
-            ResourceLocation blockModel = new ResourceLocation(REF.ID, "models/" + path + ".json");
             ResourceLocation itemModel = new ResourceLocation(REF.ID, "models/item/" + blockID + ".json");
 
-            String blockstateJson = generateBlockstatesJson(path); // Path to Block Model
-            String blockModelJson = "";
-            if(entry.get().getPart() == Parts.FRAME){
-                blockModelJson = generateFrameModelJson(path); // Path to Texture
-            }
-            else {
-                blockModelJson = generateBlockModelJson(path); // Path to Texture
-            }
-            String itemModelJson = generateBlockItemModelJson(path); // Path to Texture
-            LOGGER.info("Blockstate JSON 296: " + blockstateJson);
-            LOGGER.info("Block model JSON: " + blockModelJson);
-            LOGGER.info("Item model JSON: " + itemModelJson);
-
-
-            LOGGER.info("Blockstate path: " + blockstate);
-            LOGGER.info("Block model path: " + blockModel);
-            LOGGER.info("Item model path: " + itemModel);
+            String blockstateJson = blockstateJsonMap.get(path);
+            String itemModelJson = itemModelJsonMap.get(path);
 
             resourceMap.put(blockstate, ofText(blockstateJson));
-            resourceMap.put(blockModel, ofText(blockModelJson));
             resourceMap.put(itemModel, ofText(itemModelJson));
         }
-        /**/
 
 
         // Adding Tags
@@ -203,7 +216,6 @@ public class TechPartsPack implements PackResources {
         tagString.append("\n  ]\n")
                  .append("}");
         tagString.append("");
-
 
         return tagString.toString();
     }

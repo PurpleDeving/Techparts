@@ -23,7 +23,7 @@ public enum Material {
     COAL(0x131212,"coal",LIGNITE),
     QUARTZ(0xffffff,"quartz",Texture.QUARTZ),
 
-    REDSTONE(0xB87333,"redstone", SHINY),
+    REDSTONE(0xB87333,"redstone", SHINY), //TODO - Glow Interaction
     NETHERITE(0x353935,"netherite", LIGNITE), //TODO: Does Lignite have the needed texture ?*/
 
     /*

@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.Block;
 
 public class MatPartBlockItem extends BlockItem implements MatPartCombo {
 
-
     public MatPartBlockItem(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
     }
@@ -27,7 +26,6 @@ public class MatPartBlockItem extends BlockItem implements MatPartCombo {
         return getMaterial().getID() + "_" + getPart().getID();
     }
 
-    // TODO - Implement
     @Override
     public String getTooltip() {
         return "";

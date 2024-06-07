@@ -7,7 +7,6 @@ public enum Texture {
     DIAMOND("diamond"),
     ROUGH("rough"),
     SHINY("shiny"),
-    REDSTONE("redstone"), //TODO - Glow Interaction
     GLASS("glass"), // TODO - ADD Glass Interaction + Transparent Block
 
     //Metals
