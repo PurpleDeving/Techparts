@@ -49,7 +49,13 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+
+        ItemStack itemStack = pPlayer.getItemInHand(pHand);
+        Item item = itemStack.getItem();
+
+
         TechParts.LOGGER.info("5420 - B");
+
         // PopUp the Plate from the SCAFFOLDING
         if(this.part == Parts.SCAFFOLDING && pPlayer.isShiftKeyDown() && pPlayer.getItemInHand(pHand).isEmpty()){
             Block frameBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(REF.ID,this.material.getId()+"_"+Parts.FRAME.getID()));
@@ -60,6 +66,12 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
             ItemStack plateStack = new ItemStack(plateItem);
             BlockPos spawnPos = pPos.above();
             Block.popResource(pLevel, spawnPos, plateStack);
+        }
+
+        // Frame + Plate = Scaffolding > Sneak interaction is done in MatPartItem
+        if(this.part == Parts.FRAME && item instanceof MatPartItem && ((MatPartItem) item).getPart() == Parts.PLATE){
+            pLevel.setBlock(pPos, BuiltInRegistries.BLOCK.get(new ResourceLocation(REF.ID,this.material.getId()+"_"+Parts.SCAFFOLDING.getID())).defaultBlockState(), 3);
+            itemStack.shrink(1);
         }
 
         return InteractionResult.sidedSuccess(pLevel.isClientSide);

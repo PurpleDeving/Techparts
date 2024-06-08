@@ -60,7 +60,7 @@ public class MatPartItem extends BasicItem implements MatPartCombo {
         if (block instanceof MatPartBlock){
             Material blockmat = ((MatPartBlock) block).getMaterial();
             Parts blockpart = ((MatPartBlock) block).getPart();
-            if(this.material == blockmat && blockpart == Parts.FRAME){
+            if(this.part == Parts.PLATE && this.material == blockmat && blockpart == Parts.FRAME){
                 if (level.isClientSide) {
                     return InteractionResult.SUCCESS;
                 }
@@ -75,6 +75,7 @@ public class MatPartItem extends BasicItem implements MatPartCombo {
 
     }
 
+    // TODO - Need ?
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
         TechParts.LOGGER.info("5420 - A");
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
