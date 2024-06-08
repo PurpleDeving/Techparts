@@ -7,6 +7,7 @@ import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.item.BasicItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.material.Parts;
+import io.purple.techparts.setup.handler.Tags;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
@@ -115,7 +116,7 @@ public class TechPartsPack implements PackResources {
         Map<String, String> itemModelJsonMap = new HashMap<>();
 
         for (String path : uniquePaths) {
-            String itemModelJson = generateItemModelJson("material/" +path);
+            String itemModelJson = generateMaterialItemModelJson(path);
             itemModelJsonMap.put(path, itemModelJson);
         }
 
@@ -175,7 +176,7 @@ public class TechPartsPack implements PackResources {
 
             // ADD Tags
             Tags.MINEABLEPICK.addItem(entry.get().getId());
-            if(parts == Parts.FRAME){
+            if(parts == Parts.FRAME || parts == Parts.SCAFFOLDING){
                 Tags.CLIMBABLE.addItem(entry.get().getId());
             }
 
@@ -277,6 +278,17 @@ public class TechPartsPack implements PackResources {
                 "  \"parent\": \"item/generated\",\n" +
                 "  \"textures\": {\n" +
                 "    \"layer0\": \"" + REF.ID + ":item/" + path + "\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    private String generateMaterialItemModelJson(String path) {
+        return "{\n" +
+                "  \"parent\": \"item/generated\",\n" +
+                "  \"textures\": {\n" +
+                "    \"layer0\": \"" + REF.ID + ":item/material/" + path + "\",\n" +
+                "    \"layer1\": \"" + REF.ID + ":item/material/" + path + "_secondary\",\n" +
+                "    \"layer2\": \"" + REF.ID + ":item/material/" + path + "_overlay\"\n" +
                 "  }\n" +
                 "}";
     }

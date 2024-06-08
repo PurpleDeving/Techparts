@@ -1,15 +1,19 @@
 package io.purple.techparts.material;
 
+import java.util.ArrayList;
+
 public interface MatPartCombo {
 
-    public Material getMaterial();
-    public Parts getPart();
+    Material getMaterial();
+    Parts getPart();
 
-    public String getId();
+    String getId();
 
-    public String getTooltip(); // TODO - Implement
-    public default String getTexPath(){
+    String getTooltip(); // TODO - Implement
+    default String getTexPath(){
         return String.join("",getMaterial().getTexture().getID(),"/",getPart().getID());
     };
+
+
 
 }

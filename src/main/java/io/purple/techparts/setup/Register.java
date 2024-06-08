@@ -59,10 +59,12 @@ public class Register {
                 output.accept(SAPPHIRE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
 
-    public static void registerInit(IEventBus modEventBus) {
-        // Call up all MatPart Declarations
+    public static void registerProcess(IEventBus modEventBus) {
+        // Creat the Deffered Registries for all Items and Blocks
         MatDeclaration.init();
         TechPartItems.init();
+
+        // Change them through KubeJS Startup Script
 
         // Register the Deferred Register to the mod event bus so blocks get registered
         BLOCKS.register(modEventBus);
@@ -70,15 +72,6 @@ public class Register {
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
-    }
-
-    /*******************************************************
-     *
-     *  Creative Tab
-     *
-     *****************************************************/
-    private static void createCreativeTab() {
-
     }
 
     /*******************************************************
@@ -115,7 +108,7 @@ public class Register {
      *****************************************************/
 
     public static RegistryObject<MatPartItem> registerMatPartItem(Material material, Parts part) {
-        return ITEMS.register(material.getID()+"_"+part.getID(),() -> new MatPartItem.ItemBuilder().mat(material).part(part).build());
+        return ITEMS.register(material.getId()+"_"+part.getID(),() -> new MatPartItem.ItemBuilder().mat(material).part(part).build());
     }
 
     private static<T extends MatPartBlock> RegistryObject<MatPartBlockItem> registerMatPartBlockItem(String id, RegistryObject<T> block){
@@ -128,8 +121,8 @@ public class Register {
         if(part == Parts.FRAME){
             properties.noOcclusion();
         }
-        RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getID()+"_"+part.getID(),() -> new MatPartBlock.BlockBuilder().mat(material).part(part).props(properties).build());
-        MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getID()+ "_" + part.getID(),toReturn));
+        RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getId()+"_"+part.getID(),() -> new MatPartBlock.BlockBuilder().mat(material).part(part).props(properties).build());
+        MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getId()+ "_" + part.getID(),toReturn));
         return toReturn;
     }
 

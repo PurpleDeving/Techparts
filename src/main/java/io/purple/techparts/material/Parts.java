@@ -2,6 +2,9 @@ package io.purple.techparts.material;
 
 public enum Parts {
 
+    // Not in CeuModern
+    SCAFFOLDING("scaffolding"),
+
     //Liquid
     LIQUID("liquid"),
 
@@ -25,6 +28,7 @@ public enum Parts {
     INGOT_HOT("ingot_hot"),
     NUGGET("nugget"),
     BLOCK("block"),
+
 
 
     //PARTS

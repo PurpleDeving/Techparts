@@ -36,10 +36,17 @@ public class MatDeclaration{
         // TODO - Check how I can have the same Material with different textures ? Mayve cioy the material enums ?
         // TODO - Why the fuck does RADIOACTIVE has a Gem secondary but no GEM ?
 
-    /*
-        Material Sets
-     */
-        //EnumSet<Material> mats_allNonVanilla = EnumSet.range(BRASS,QUARTZITE);
+        /*******************************************************
+         *
+         *  Material Declaration
+         *
+         *****************************************************/
+
+
+        EnumSet<Material> mats_allNonVanilla = EnumSet.range(CERTUS_QUARTZ,GLUE);
+
+
+
 
         //Vanilla needs to Exclude existing parts
         createMaterialGroupExcludeGroup(GOLD,all,vanillaMetals);
@@ -63,9 +70,9 @@ public class MatDeclaration{
         //createLiquid(GLUE);
 
         //ALL loop for WIP things
-        //for(Material material:mats_allNonVanilla){
-        //    createMaterialGroupAddSingles(material,all);
-        //}
+        for(Material material:mats_allNonVanilla){
+            createMaterialGroupAddSingles(material,all);
+        }
 
     }
 
@@ -111,7 +118,7 @@ public class MatDeclaration{
 
             //Add itemlike (Block or ITEM) to materialParts_XXXX for datagen
             switch (part) {
-                case FRAME, BLOCK:
+                case FRAME, BLOCK, SCAFFOLDING:
                     MATERIAL_PART_BLOCKS.add(Register.registerMatPartBlock(material, part));
                     break;
                 case LIQUID:

@@ -6,10 +6,7 @@ import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.client.resource.ResourcePackAdapter;
 import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,13 +20,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import io.purple.techparts.setup.TechPartsPack;
 
-import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 import static io.purple.techparts.setup.Register.*;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -52,7 +47,7 @@ public class TechParts {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        Register.registerInit(modEventBus);
+        Register.registerProcess(modEventBus);
 
 
 

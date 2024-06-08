@@ -34,15 +34,15 @@ public class ColorHandler {
         ItemColors itemColors = event.getItemColors();
 
         for(RegistryObject<MatPartBlockItem> mp:MATERIAL_PART_BLOCKITEMS){
-            itemColors.register((stack, index) -> index > 0 ? -1 : mp.get().getMaterial().getRbg(index),mp.get().asItem());
+            itemColors.register((stack, index) -> index > 0 ? -1 : mp.get().getMaterial().getRbg(index),mp.get());
         }
 
         for(RegistryObject<MatPartItem> mp:MATERIAL_PART_ITEMS){
-            itemColors.register((stack, index) -> index > 0 ? -1 : mp.get().getMaterial().getRbg(index),mp.get().asItem());
+            itemColors.register((stack, index) -> mp.get().getMaterial().getRbg(index),mp.get());
         }
 
 
-        /*event.getItemColors().register(
+/*        event.getItemColors().register(
                 (stack, tintIndex) -> {
                     if (stack.getItem() instanceof MatPartBlockItem) {
                         return ((MatPartBlockItem) stack.getItem()).getMaterial().getRbg(tintIndex);

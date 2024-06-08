@@ -3,10 +3,6 @@ package io.purple.techparts.item;
 import io.purple.techparts.material.MatPartCombo;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
-import io.purple.techparts.setup.Register;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class MatPartItem extends BasicItem implements MatPartCombo {
 
@@ -47,7 +43,7 @@ public class MatPartItem extends BasicItem implements MatPartCombo {
         }
 
         public MatPartItem build(){
-            this.id(material.getID() + "_" + this.part.getID());
+            this.id(material.getId() + "_" + this.part.getID());
             return new MatPartItem(this);
         }
     }

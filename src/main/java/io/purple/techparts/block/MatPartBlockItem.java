@@ -4,7 +4,6 @@ import io.purple.techparts.material.MatPartCombo;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
 public class MatPartBlockItem extends BlockItem implements MatPartCombo {
@@ -23,7 +22,7 @@ public class MatPartBlockItem extends BlockItem implements MatPartCombo {
 
     @Override
     public String getId() {
-        return getMaterial().getID() + "_" + getPart().getID();
+        return getMaterial().getId() + "_" + getPart().getID();
     }
 
     @Override
