@@ -48,41 +48,21 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
 
 
     @Override
-    public InteractionResult use(BlockState pState, Level plevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if(plevel.isClientSide){
-            return InteractionResult.sidedSuccess(plevel.isClientSide);
-        }
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        TechParts.LOGGER.info("5420 - B");
         // PopUp the Plate from the SCAFFOLDING
         if(this.part == Parts.SCAFFOLDING && pPlayer.isShiftKeyDown() && pPlayer.getItemInHand(pHand).isEmpty()){
             Block frameBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(REF.ID,this.material.getId()+"_"+Parts.FRAME.getID()));
-            plevel.setBlock(pPos, frameBlock.defaultBlockState(), 3);
+            pLevel.setBlock(pPos, frameBlock.defaultBlockState(), 3);
 
             // Spawn a PLATE item on top of the new FRAME block
             Item plateItem = BuiltInRegistries.ITEM.get(new ResourceLocation(REF.ID, this.material.getId() + "_" + Parts.PLATE.getID()));
             ItemStack plateStack = new ItemStack(plateItem);
             BlockPos spawnPos = pPos.above();
-            Block.popResource(plevel, spawnPos, plateStack);
-
-            return InteractionResult.CONSUME;
-        }
-        // Create Scaffolding form Frame + Plate
-        MatPartItem plate = (MatPartItem) BuiltInRegistries.ITEM.get(new ResourceLocation(REF.ID, this.material.getId() + "_" + Parts.PLATE.getID()));
-        if(this.part == Parts.FRAME && pPlayer.isShiftKeyDown() /*&& pPlayer.getItemInHand(pHand).is(plate)*/){
-            TechParts.LOGGER.info("AAAAA -232323");
-            Block scaffoldBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(REF.ID,this.material.getId()+"_"+Parts.SCAFFOLDING.getID()));
-            plevel.setBlock(pPos, scaffoldBlock.defaultBlockState(), 3);
-
-            // Lower the Plate number by one
-            ItemStack itemStack = pPlayer.getItemInHand(pHand);
-            if (!pPlayer.getAbilities().instabuild) {
-                itemStack.shrink(1);
-            }
-
-            return InteractionResult.CONSUME;
+            Block.popResource(pLevel, spawnPos, plateStack);
         }
 
-
-        return InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(pLevel.isClientSide);
     }
 
     /*******************************************************
