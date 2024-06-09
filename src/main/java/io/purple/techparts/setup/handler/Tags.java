@@ -8,7 +8,7 @@ import java.util.List;
 public enum Tags {
 
     CLIMBABLE("minecraft","blocks/climbable"),
-    MINEABLEPICK("minecraft","blocks/minable/pickaxe");
+    MINEABLEPICK("minecraft","blocks/mineable/pickaxe");
 
     private final String rlLoc;
     private final String path;

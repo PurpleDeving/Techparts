@@ -75,24 +75,6 @@ public class MatPartItem extends BasicItem implements MatPartCombo {
 
     }
 
-    // TODO - Need ?
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
-        TechParts.LOGGER.info("5420 - A");
-        ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        BlockHitResult blockhitresult = getPlayerPOVHitResult(pLevel, pPlayer, ClipContext.Fluid.NONE);
-        if (blockhitresult.getType() == HitResult.Type.BLOCK && pLevel.getBlockState(blockhitresult.getBlockPos()).getBlock() instanceof MatPartBlock) {
-            MatPartBlock block = (MatPartBlock) pLevel.getBlockState(blockhitresult.getBlockPos()).getBlock();
-            Material blockmat = block.getMaterial();
-            Parts blockpart = block.getPart();
-            if(this.material == blockmat && blockpart == Parts.FRAME){
-                return InteractionResultHolder.pass(itemstack);
-            }
-        }
-        return InteractionResultHolder.fail(itemstack);
-
-    }
-
-
 
 
     /*******************************************************

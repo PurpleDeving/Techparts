@@ -7,6 +7,7 @@ import io.purple.techparts.material.MatPartCombo;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -53,9 +54,6 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
         ItemStack itemStack = pPlayer.getItemInHand(pHand);
         Item item = itemStack.getItem();
 
-
-        TechParts.LOGGER.info("5420 - B");
-
         // PopUp the Plate from the SCAFFOLDING
         if(this.part == Parts.SCAFFOLDING && pPlayer.isShiftKeyDown() && pPlayer.getItemInHand(pHand).isEmpty()){
             Block frameBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(REF.ID,this.material.getId()+"_"+Parts.FRAME.getID()));
@@ -75,6 +73,17 @@ public class MatPartBlock extends BasicBlock implements MatPartCombo {
         }
 
         return InteractionResult.sidedSuccess(pLevel.isClientSide);
+    }
+
+    // Redstone Interaction
+    @Override
+    public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+        switch (this.material){
+            case REDSTONE:
+                return 15;
+            default:
+                return 0;
+        }
     }
 
     /*******************************************************

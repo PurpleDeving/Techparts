@@ -34,9 +34,9 @@ import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 public class Register {
 
 
-    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
+    // Create a Deferred Register to hold Blocks which will all be registered under the REF.ID namespace
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, REF.ID);
-    // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
+    // Create a Deferred Register to hold Items which will all be registered under the REF.ID namespace
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, REF.ID);
 
     public static final Collection<RegistryObject<MatPartItem>> MATERIAL_PART_ITEMS = new ArrayList<>();
@@ -116,10 +116,14 @@ public class Register {
     }
 
     // Also provides custom things to all MatPartBlocks that dont need a seperate class
-    public static RegistryObject<MatPartBlock> registerMatPartBlock(Material material, Parts part) {
-        BlockBehaviour.Properties properties = Register.baseBlockProps();
+    public static RegistryObject<MatPartBlock> registerMatPartBlock(Material material, Parts part, BlockBehaviour.Properties properties) {
         if(part == Parts.FRAME){
             properties.noOcclusion();
+        }
+        if(material == Material.GLOWSTONE){
+            properties.lightLevel((p_50874_) -> {
+                return 15;
+            });
         }
         RegistryObject<MatPartBlock> toReturn = BLOCKS.register(material.getId()+"_"+part.getID(),() -> new MatPartBlock.BlockBuilder().mat(material).part(part).props(properties).build());
         MATERIAL_PART_BLOCKITEMS.add(registerMatPartBlockItem(material.getId()+ "_" + part.getID(),toReturn));

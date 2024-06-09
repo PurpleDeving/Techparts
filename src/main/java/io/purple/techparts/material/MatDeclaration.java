@@ -1,7 +1,12 @@
 package io.purple.techparts.material;
 
 
+import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.setup.Register;
+import io.purple.techparts.setup.handler.Tags;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.registries.RegistryObject;
+
 import java.util.*;
 
 import static io.purple.techparts.TechParts.LOGGER;
@@ -51,10 +56,10 @@ public class MatDeclaration{
         //Vanilla needs to Exclude existing parts
         createMaterialGroupExcludeGroup(GOLD,all,vanillaMetals);
         createMaterialGroupExcludeSingles(COPPER,all,INGOT,ORE_RAW,BLOCK); //Not ExcludeGroup vanillaMetals, because there is no vanilla Copper Nugget
-        /*createMaterialGroupExcludeGroup(IRON,all,vanillaMetals);
+        createMaterialGroupExcludeGroup(IRON,all,vanillaMetals);
         createMaterialGroupExcludeSingles(GLOWSTONE,all,DUST,BLOCK);
-        createMaterialGroupExcludeSingles(REDSTONE,ores);
-        createMaterialGroupAddSingles(CHARCOAL,dustsandores,BLOCK,PLATE);
+        createMaterialGroupExcludeSingles(REDSTONE,all,DUST,BLOCK);
+        /*createMaterialGroupAddSingles(CHARCOAL,dustsandores,BLOCK,PLATE);
         createMaterialGroupAddSingles(COAL,dustsandores,BLOCK,PLATE);
         createMaterialGroupAddSingles(QUARTZ,ores,DUST,PLATE);*/
         /*createMaterialSingles(NETHERITE,DUST,PLATE,NUGGET,PLATE_DENSE,ROD,GEAR_SMALL,LENS); */
@@ -115,11 +120,23 @@ public class MatDeclaration{
     private static void createMaterialFromList(Material material, ArrayList<Parts> listOfParts) {
         LOGGER.info("Creating MaterialItems");
         for(Parts part:listOfParts){
-
-            //Add itemlike (Block or ITEM) to materialParts_XXXX for datagen
             switch (part) {
+                // MatPartBlocks
                 case FRAME, BLOCK, SCAFFOLDING:
-                    MATERIAL_PART_BLOCKS.add(Register.registerMatPartBlock(material, part));
+                    // Pre Creation
+                    BlockBehaviour.Properties properties = Register.baseBlockProps();
+                    // Fix that Frames arnt a wallhack
+                    if(part == Parts.FRAME){
+                        properties.noOcclusion();
+                    }
+                    // Glowstone Interaction
+                    if(material == Material.GLOWSTONE){
+                        properties.lightLevel((p_50874_) -> {
+                            return 15;
+                        });
+                    }
+
+                    MATERIAL_PART_BLOCKS.add(Register.registerMatPartBlock(material, part, properties));
                     break;
                 case LIQUID:
                     //TODO - Implement
