@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.purple.techparts.TechParts.LOGGER;
 import static io.purple.techparts.setup.Register.*;
 import static io.purple.techparts.setup.handler.JsonHandler.ofText;
 import static io.purple.techparts.setup.handler.ModelHandler.*;
@@ -48,8 +49,6 @@ public class LoopHandler {
              *  TAGS
              *
              *****************************************************/
-
-            Tags.MINEABLEPICK.addItem(entry.get().getId());
 
             /*******************************************************
              *
@@ -95,6 +94,21 @@ public class LoopHandler {
             String blockstateJson = ModelHandler.generateBlockstatesJson(path); // Path to Block Model
             String blockModelJson = generateBlockModelJson(path);     // Path to texture
             String itemModelJson = generateBlockItemModelJson(path);  // Path to texture
+            resourceMap.put(blockstate, ofText(blockstateJson));
+            resourceMap.put(blockModel, ofText(blockModelJson));
+            resourceMap.put(itemModel, ofText(itemModelJson));
+
+            /*******************************************************
+             *
+             *  Loot
+             *
+             *****************************************************/
+            ResourceLocation loot = new ResourceLocation(REF.ID,blockID);
+            String lootJson = JsonHandler.generateDefaultLootJson(REF.ID + ":" + blockID);
+            LOGGER.info("Loot Test");
+            LOGGER.info(loot.getPath());
+            LOGGER.info(lootJson);
+            resourceMap.put(loot,ofText(lootJson));
 
         }
     }

@@ -32,6 +32,37 @@ public class JsonHandler {
         return translateString.toString();
     }
 
+    /*******************************************************
+     *
+     *  Loottables
+     *
+     *****************************************************/
+
+    public static String generateDefaultLootJson(String blockId){
+        return "{\n" +
+                "  \"type\": \"minecraft:block\",\n" +
+                "  \"pools\": [\n" +
+                "    {\n" +
+                "      \"rolls\": 1,\n" +
+                "      \"bonus_rolls\": 0,\n" +
+                "      \"entries\": [\n" +
+                "        {\n" +
+                "          \"type\": \"minecraft:item\",\n" +
+                "          \"name\": \""+ blockId + "\"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"conditions\": [\n" +
+                "        {\n" +
+                "          \"condition\": \"minecraft:survives_explosion\"\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}\n";
+    }
+
+
+
 
     /*******************************************************
      *

@@ -67,10 +67,6 @@ public class TechPartsPack implements PackResources {
 
         // Adding Tags
         for(Tags tag : Tags.values()){
-            LOGGER.info("23007-2 " + tag);
-            LOGGER.info(tag.getPath());
-            LOGGER.info(tag.getRlLoc());
-            LOGGER.info(String.valueOf(tag.getEntries()));
             ResourceLocation tagFile = new ResourceLocation(tag.getRlLoc(),tag.getPath());
             String tagJson = generateTagJson(tag.getEntries());
             LOGGER.info(tagJson);
