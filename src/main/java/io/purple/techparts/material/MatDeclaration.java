@@ -1,10 +1,13 @@
 package io.purple.techparts.material;
 
 
+import io.purple.techparts.REF;
 import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.setup.Register;
 import io.purple.techparts.setup.handler.Tags;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.*;
@@ -140,6 +143,16 @@ public class MatDeclaration{
                     break;
                 case LIQUID:
                     //TODO - Implement
+                    if (material == GOLD){
+                        String id = material.getId()+"_"+part.getID();
+                        FluidType.Properties fluidTypePropertiers = FluidType.Properties.create()
+                                        .descriptionId(String.format("block.%s.%s", REF.ID, id))
+                                        .density(1000)
+                                        .canSwim(true)
+                                        .canDrown(true)
+                                        .viscosity(1000);
+                        Register.registerFluid(id, fluidTypePropertiers,material.getRbg(0),4,2);
+                    }
                     LOGGER.info("Fluids arnt a thing ATM");
                     break;
                 default:

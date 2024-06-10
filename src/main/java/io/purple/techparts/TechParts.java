@@ -7,6 +7,7 @@ import io.purple.techparts.client.resource.ResourcePackAdapter;
 import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
@@ -89,6 +90,9 @@ public class TechParts {
            }
            for (RegistryObject<BlockItem> blockitem : BASIC_BLOCKITEMS){
                event.accept(blockitem);
+           }
+           for (BucketItem bucketItem : Register.getBuckets().toList()){
+               event.accept(bucketItem);
            }
        }
 

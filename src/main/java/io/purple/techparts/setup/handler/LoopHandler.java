@@ -103,7 +103,7 @@ public class LoopHandler {
              *  Loot
              *
              *****************************************************/
-            ResourceLocation loot = new ResourceLocation(REF.ID,blockID);
+            ResourceLocation loot = new ResourceLocation(REF.ID,"loot_tables/blocks/" + blockID + ".json");
             String lootJson = JsonHandler.generateDefaultLootJson(REF.ID + ":" + blockID);
             LOGGER.info("Loot Test");
             LOGGER.info(loot.getPath());
@@ -224,6 +224,16 @@ public class LoopHandler {
              *
              *****************************************************/
             translatables.put(String.format("block.%s.%s", REF.ID, blockID), entry.get().getClearName());
+
+            /*******************************************************
+             *
+             *  Loot
+             *
+             *****************************************************/
+
+            ResourceLocation loot = new ResourceLocation(REF.ID, "loot_tables/blocks/" + blockID + ".json");
+            String lootJson = JsonHandler.generateDefaultLootJson(REF.ID + ":" + blockID);
+            resourceMap.put(loot, ofText(lootJson));
 
         }
 
