@@ -151,7 +151,7 @@ public class MatDeclaration{
                                         .canSwim(true)
                                         .canDrown(true)
                                         .viscosity(1000);
-                        Register.registerFluid(id, fluidTypePropertiers,material.getRbg(0),4,2);
+                        Register.registerFluid(id, fluidTypePropertiers, Integer.parseInt("0", 16),4,2);
                     }
                     LOGGER.info("Fluids arnt a thing ATM");
                     break;

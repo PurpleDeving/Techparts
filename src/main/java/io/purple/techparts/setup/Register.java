@@ -63,7 +63,7 @@ public class Register {
 
 
 
-    public static final Collection<RegistryObject<Fluid>> BASIC_FLUIDS = new ArrayList<>();
+    public static final Collection<RegistryObject<Fluid>> FLUID_BLOCKS = new ArrayList<>();
 
 
     //TODO - Use the bucket etc
@@ -180,7 +180,7 @@ public class Register {
             }
         });
 
-        RegistryObject<FlowingFluid> fluidSource = FLUIDS.register(String.format("%s_fluid", pName), () -> new ForgeFlowingFluid.Source(ref.properties));
+        RegistryObject<FlowingFluid> fluidSource = FLUIDS.register(pName, () -> new ForgeFlowingFluid.Source(ref.properties));
         RegistryObject<FlowingFluid> fluidFlowing = FLUIDS.register(String.format("%s_flowing", pName), () -> new ForgeFlowingFluid.Flowing(ref.properties));
         RegistryObject<LiquidBlock> liquidBlock = LIQUID_BLOCKS.register(pName, () -> new LiquidBlock(fluidSource, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid()));
         RegistryObject<Item> bucket = BUCKETS.register(String.format("%s_bucket", pName), () -> new BucketItem(fluidSource, new Item.Properties().stacksTo(1)));
@@ -190,6 +190,10 @@ public class Register {
                 .levelDecreasePerBlock(pDecreasePerBlock)
                 .block(liquidBlock)
                 .bucket(bucket);
+    }
+
+    public static Stream<LiquidBlock> getLiquidBlocks() {
+        return LIQUID_BLOCKS.getEntries().stream().map(RegistryObject::get).map(block -> (LiquidBlock) block);
     }
 
     public static Stream<BucketItem> getBuckets() {

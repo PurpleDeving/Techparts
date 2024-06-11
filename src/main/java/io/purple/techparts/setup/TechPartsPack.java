@@ -57,6 +57,9 @@ public class TechPartsPack implements PackResources {
         LoopHandler.basicBlockLoop(resourceMap);
         LoopHandler.MatPartItemLoop(resourceMap);
         LoopHandler.MatPartBlockLoop(resourceMap);
+        LoopHandler.fluidLoop(resourceMap);
+        LoopHandler.bucketLoop(resourceMap);
+
 
 
         /*******************************************************

@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -91,6 +92,9 @@ public class TechParts {
            for (RegistryObject<BlockItem> blockitem : BASIC_BLOCKITEMS){
                event.accept(blockitem);
            }
+/*           for (Fluid fluid : Register.getFluids().toList()){
+
+           }*/
            for (BucketItem bucketItem : Register.getBuckets().toList()){
                event.accept(bucketItem);
            }

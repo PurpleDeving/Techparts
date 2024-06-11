@@ -1,5 +1,6 @@
 package io.purple.techparts.setup.handler;
 
+import io.purple.techparts.REF;
 import io.purple.techparts.setup.TechPartsPack;
 
 import java.io.ByteArrayInputStream;
@@ -60,7 +61,6 @@ public class JsonHandler {
                 "  ]\n" +
                 "}\n";
     }
-
 
 
 

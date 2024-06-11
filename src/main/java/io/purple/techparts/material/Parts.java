@@ -6,7 +6,7 @@ public enum Parts {
     SCAFFOLDING("scaffolding"),
 
     //Liquid
-    LIQUID("liquid"),
+    LIQUID("fluid"),
 
     //OREPROCESS
     DUST("dust"),

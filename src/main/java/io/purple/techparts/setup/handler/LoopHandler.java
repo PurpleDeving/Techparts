@@ -7,7 +7,12 @@ import io.purple.techparts.item.BasicItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.material.Material;
 import io.purple.techparts.material.Parts;
+import io.purple.techparts.setup.Register;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.RegistryObject;
 import io.purple.techparts.setup.TechPartsPack;
 
@@ -239,6 +244,30 @@ public class LoopHandler {
 
     }
 
+    public static void fluidLoop(Map<ResourceLocation, TechPartsPack.IResourceStreamSupplier> resourceMap) {
+        String fluidJson = ModelHandler.generateFluidModelJson();
+        for (LiquidBlock fluid : Register.getLiquidBlocks().toList()){
+            String id = "gold_fluid";
+            LOGGER.info("TEST 223  " + id);
+            ResourceLocation fluidModel = new ResourceLocation(REF.ID, "models/block/" + id +".json");
+            resourceMap.put(fluidModel, ofText(fluidJson));
+        }
+    }
+
+
+    public static void bucketLoop(Map<ResourceLocation, TechPartsPack.IResourceStreamSupplier> resourceMap) {
+        String bucketJson = ModelHandler.generateFluidBucketModelJson();
+        for (BucketItem bucketItem : Register.getBuckets().toList()){
+            String id = bucketItem.toString();
+            LOGGER.info("TEST 223  " + bucketItem.toString());
+            LOGGER.info("TEST 223  " + bucketItem.asItem().getDescription());
+            LOGGER.info("TEST 223  " + bucketItem.asItem().toString());
+            LOGGER.info("TEST 223  " + bucketItem.getDescription());
+            ResourceLocation bucketModel = new ResourceLocation(REF.ID,"models/item/"+ id + ".json");
+            LOGGER.info(bucketJson);
+            resourceMap.put(bucketModel,ofText(bucketJson));
+        }
+    }
 }
 
 
