@@ -1,17 +1,21 @@
 package io.purple.techparts;
 
 import com.mojang.logging.LogUtils;
+import com.tterrag.registrate.Registrate;
 import io.purple.techparts.block.MatPartBlockItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.client.resource.ResourcePackAdapter;
+import io.purple.techparts.setup.CreativeTabs;
 import io.purple.techparts.setup.Register;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,11 +40,7 @@ public class TechParts {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
-
-
-
-
+    private static final Lazy<Registrate> REGISTRATE = Lazy.of(() -> Registrate.create(REF.ID));
 
 
     public TechParts() {
@@ -49,6 +49,9 @@ public class TechParts {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        CreativeTabs.register();
+
+        // FIXME OLD
         Register.registerProcess(modEventBus);
 
 
@@ -66,6 +69,18 @@ public class TechParts {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
     }
+    /*******************************************************
+     *
+     *  Registrate and RL Helpers
+     *
+     *****************************************************/
+    public static Registrate registrate(){
+        return REGISTRATE.get();
+    }
+    public static ResourceLocation modLoc(String path) {
+        return new ResourceLocation(REF.ID, path);
+    }
+
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
