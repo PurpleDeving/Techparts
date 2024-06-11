@@ -8,17 +8,22 @@ import io.purple.techparts.item.BasicItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.material.Parts;
 import io.purple.techparts.setup.Register;
+import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
@@ -62,6 +67,7 @@ public class ColorHandler {
     @SubscribeEvent
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event){
 
+
         for (RegistryObject<MatPartBlock> block : MATERIAL_PART_BLOCKS) {
 
             event.getBlockColors().register((state, level, pos, tintIndex) -> block.get().getMaterial().getRbg(tintIndex), block.get());
@@ -70,6 +76,10 @@ public class ColorHandler {
                 ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.translucent());
             }
         }
+    }
+
+    private static Object getColor(int tintIndex) {
+        return 0xB87333;
     }
 
 }

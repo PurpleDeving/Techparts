@@ -5,12 +5,12 @@ import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.util.entry.FluidEntry;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import io.purple.techparts.REF;
 import io.purple.techparts.TechParts;
 import io.purple.techparts.block.BasicBlock;
 import io.purple.techparts.block.MatPartBlock;
 import io.purple.techparts.block.MatPartBlockItem;
+import io.purple.techparts.fluid.BaseFluidType;
 import io.purple.techparts.item.BasicItem;
 import io.purple.techparts.item.MatPartItem;
 import io.purple.techparts.item.TechPartItems;
@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -34,7 +33,6 @@ import net.minecraft.world.level.material.*;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -43,6 +41,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.versions.forge.ForgeVersion;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +49,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static io.purple.techparts.TechParts.LOGGER;
-import static io.purple.techparts.TechParts.modLoc;
 import static io.purple.techparts.item.TechPartItems.SAPPHIRE;
 
 
@@ -63,6 +61,8 @@ public class Register {
      *  Fluids
      *
      *****************************************************/
+
+
 
     // TEST
     public static final FluidEntry<? extends ForgeFlowingFluid> NUTRIENT_DISTILLATION = fluid("nutrient_distillation")
@@ -81,7 +81,9 @@ public class Register {
 /*        var thing = REGISTRATE.fluid(name, modLoc("block/fluid_" + name + "_still"), // FIXME
                 modLoc("block/fluid_" + name + "_flowing"));*/
         var thing = REGISTRATE.fluid(name, new ResourceLocation("minecraft","block/lava_still"), // FIXME
-                new ResourceLocation("minecraft","block/lava_flow"));
+                new ResourceLocation("minecraft","block/lava_flow")/*, () -> new BaseFluidType(0xff0080,new Vector3f(224f / 255f,56f / 255f,208f / 255f),FluidType.Properties.create().viscosity(1000).density(1000).canSwim(false))*/);
+
+
         if (FMLEnvironment.dist.isClient()) {
             thing.renderType(RenderType::translucent);
         }
@@ -140,6 +142,8 @@ public class Register {
             .displayItems((parameters, output) -> {
                 output.accept(SAPPHIRE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
+
+
 
     public static void registerProcess(IEventBus modEventBus) {
         // Creat the Deffered Registries for all Items and Blocks
