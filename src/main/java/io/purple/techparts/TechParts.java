@@ -46,7 +46,6 @@ public class TechParts
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-
     // Create a Deferred Register to hold Blocks which will all be registered under the "techparts" namespace
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     // Create a Deferred Register to hold Items which will all be registered under the "techparts" namespace
@@ -69,7 +68,6 @@ public class TechParts
     {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-
 
         // Last Step before .register calls
         CreativeTab.creativeTabInit();
