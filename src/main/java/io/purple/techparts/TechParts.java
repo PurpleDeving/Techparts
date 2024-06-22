@@ -1,6 +1,9 @@
 package io.purple.techparts;
 
 import io.purple.techparts.client.CreativeTab;
+import io.purple.techparts.material.CreateMaterialCombos;
+import io.purple.techparts.material.Materials;
+import io.purple.techparts.material.Part;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -35,6 +38,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import static io.purple.techparts.Registry.*;
 import static io.purple.techparts.client.CreativeTab.CREATIVE_MODE_TABS;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -44,12 +48,12 @@ public class TechParts
     // Define mod id in a common place for everything to reference
     public static final String MODID = "techparts";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
-    // Create a Deferred Register to hold Blocks which will all be registered under the "techparts" namespace
+/*    // Create a Deferred Register to hold Blocks which will all be registered under the "techparts" namespace
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     // Create a Deferred Register to hold Items which will all be registered under the "techparts" namespace
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);*/
 
     // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
     public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
@@ -69,6 +73,16 @@ public class TechParts
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        // Make sure Materials and Parts Exist
+        Materials.init();
+
+        Registry.init();
+
+        // Create Material Items
+        CreateMaterialCombos.init();
+
+
+
         // Last Step before .register calls
         CreativeTab.creativeTabInit();
 
@@ -76,6 +90,10 @@ public class TechParts
         BLOCKS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ITEMS.register(modEventBus);
+        FLUIDS.register(modEventBus);
+        FLUID_TYPES.register(modEventBus);
+        BLOCK_ENTITY_TYPES.register(modEventBus);
+
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
 

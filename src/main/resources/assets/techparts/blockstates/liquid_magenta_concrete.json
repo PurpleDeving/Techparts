@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "liquidblocks:block/liquid_block"
+    }
+  }
+}

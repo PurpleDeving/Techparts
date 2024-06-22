@@ -2,11 +2,16 @@ package io.purple.techparts.material;
 
 public enum Part {
 
-    FRAME("frame"),
-
     DUST("dust"),
-    SMALL_DUST("dust_small",true),
-    BLOCK("block");
+    SMALL_DUST("dust_small"),
+
+    // BLOCKS
+    FRAME("frame"),
+    SCAFFOLDING("scaffolding"),
+    BLOCK("block"),
+
+    // LIQUID
+    LIQUID("fluid");
 
     private final String id;
 
@@ -14,19 +19,15 @@ public enum Part {
     private final String namePrefix;
 
 
-    Part(String id){
-        this(id,false);
-    }
-
-
-    Part(String id, Boolean prefixName) {
+    Part(String id) {
         this.id = id;
-        if(!prefixName) {
+        int underscoreIndex = id.indexOf("_");
+        if(underscoreIndex == -1) {
             this.namePrefix = "";
-            this.name = getNamefromId(id);
-        } else{  // If Its a Prefix Name
-            this.namePrefix = getPrefixName(id);
-            this.name = getSuffixName(id);
+            this.name = id.toUpperCase();
+        } else{  // If it's a Prefix Name
+            this.name = id.substring(0, underscoreIndex).toUpperCase();
+            this.namePrefix = id.substring(underscoreIndex+1).toUpperCase();
         }
     }
 
@@ -40,22 +41,11 @@ public enum Part {
         return id;
     }
 
-    /********************************************************
-
-     Helper
-
-     ********************************************************/
-
-    private static String getSuffixName(String id) {
-        
+    public String getName() {
+        return name;
     }
 
-    private String getPrefixName(String id) {
-        return null;
+    public String getNamePrefix() {
+        return namePrefix;
     }
-
-    private static String getNamefromId(String id) {
-
-    }
-
 }
