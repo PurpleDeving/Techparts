@@ -1,4 +1,4 @@
-package io.purple.techparts.block;
+package io.purple.techparts.fluid.block;
 
 import io.purple.techparts.fluid.LiquidTags;
 import net.minecraft.core.BlockPos;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class LiquidOreBlock extends LiquidEntityBlock {
+public class LiquidOreBlock extends LiquidSolidifyBlock {
 
 	public LiquidOreBlock(Block.Properties properties, Supplier<? extends FlowingFluid> supplier, Supplier<Block> blockSupplier) {
 		super(properties, supplier, blockSupplier);

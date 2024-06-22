@@ -1,10 +1,10 @@
 package io.purple.techparts.fluid;
 
-import io.purple.techparts.block.LiquidEntityBlock;
-import io.purple.techparts.block.LiquidOreBlock;
+import io.purple.techparts.fluid.block.LiquidOreBlock;
 import io.purple.techparts.Registry;
 import io.purple.techparts.TechParts;
-import io.purple.techparts.block.TPFBlock;
+import io.purple.techparts.fluid.block.LiquidSolidifyBlock;
+import io.purple.techparts.fluid.block.TPFBlock;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public class TPFReg {
     private final DeferredHolder<FluidType, FluidType> fluidType;
     private DeferredHolder<Fluid, BaseFlowingFluid> source;
     private DeferredHolder<Fluid, BaseFlowingFluid> flowing;
-    private DeferredBlock<LiquidBlock> fluidblock;
+    private DeferredBlock<LiquidBlock> fluidBlock;
     private DeferredItem<LiquidBucketItem> bucket;
 
     @Nonnull
@@ -68,8 +68,8 @@ public class TPFReg {
     }
 
     @Nonnull
-    public LiquidBlock getFluidblock() {
-        return fluidblock.get();
+    public LiquidBlock getFluidBlock() {
+        return fluidBlock.get();
     }
 
     public DeferredItem<LiquidBucketItem> getBucketRegistry() {
@@ -86,7 +86,7 @@ public class TPFReg {
                 .bucket(bucket).block(block);
     }
 
-    public TPFReg(String name, Supplier<Block> blockSupplier, MapColor mapColor, int color, boolean coldLiquid, int luminosity) {
+    public TPFReg(String name, Supplier<Block> solidifyBlockSupplier, MapColor mapColor, int color, boolean coldLiquid, int luminosity) {
         this.name = name;
         fluidType = Registry.FLUID_TYPES.register(name, () -> new FluidType(FluidHelper.createTypeProperties().temperature(coldLiquid ? 300 : 1000).lightLevel(luminosity)) {
             @Override
@@ -128,53 +128,26 @@ public class TPFReg {
             }
         });
         source = Registry.FLUIDS.register(name, () -> new TPFFluid.Source(
-                createProperties(fluidType, source, flowing, bucket, fluidblock))
+                createProperties(fluidType, source, flowing, bucket, fluidBlock))
         );
         flowing = Registry.FLUIDS.register(name + "_flowing", () -> new TPFFluid.Flowing(
-                createProperties(fluidType, source, flowing, bucket, fluidblock))
+                createProperties(fluidType, source, flowing, bucket, fluidBlock))
         );
 
-        if (name.equals("ore")) {
-            fluidblock = Registry.BLOCKS.register(name, () -> new LiquidOreBlock(
-                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().noLootTable().lightLevel(state -> luminosity), source, blockSupplier));
+        if (solidifyBlockSupplier == null){ // If there is NO Block to Solidify: Create a normal Fluid Block.
+            fluidBlock = Registry.BLOCKS.register(name, () -> new TPFBlock(
+                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().replaceable().noLootTable().lightLevel(state -> luminosity), source));
+        } else if (name.equals("ore")) {
+            fluidBlock = Registry.BLOCKS.register(name, () -> new LiquidOreBlock(
+                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().replaceable().noLootTable().lightLevel(state -> luminosity), source, solidifyBlockSupplier));
         } else {
-            fluidblock = Registry.BLOCKS.register(name, () -> new TPFBlock(
-                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().noLootTable().lightLevel(state -> luminosity), source, blockSupplier));
+            fluidBlock = Registry.BLOCKS.register(name, () -> new LiquidSolidifyBlock(
+                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().replaceable().noLootTable().lightLevel(state -> luminosity), source, solidifyBlockSupplier));
         }
+
+
+
         bucket = Registry.ITEMS.register(name + "_bucket", () -> new LiquidBucketItem(new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1), source));
     }
 
-    public static class Builder {
-        private String name;
-        private Supplier<Block> blockSupplier;
-        private MapColor mapColor = MapColor.WATER;
-        private int color;
-        private boolean hot = false;
-        private int luminosity = 0;
-
-        public Builder(String name, Supplier<Block> blockSupplier, int color) {
-            this.name = name;
-            this.blockSupplier = blockSupplier;
-            this.color = color;
-        }
-
-        public Builder mapColor(MapColor mapColor) {
-            this.mapColor = mapColor;
-            return this;
-        }
-
-        public Builder hot() {
-            this.hot = true;
-            return this;
-        }
-
-        public Builder luminosity(int luminosity) {
-            this.luminosity = luminosity;
-            return this;
-        }
-
-        public TPFReg build() {
-            return new TPFReg(name, blockSupplier, mapColor, color, hot, luminosity);
-        }
-    }
 }

@@ -1,7 +1,7 @@
-package io.purple.techparts.block;
+package io.purple.techparts.fluid.block;
 
 import io.purple.techparts.Registry;
-import io.purple.techparts.blockentity.LiquidBlockEntity;
+import io.purple.techparts.fluid.blockentity.LiquidSolidifyBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -18,10 +18,10 @@ import net.minecraft.world.level.material.FlowingFluid;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class LiquidEntityBlock extends LiquidBlock implements EntityBlock {
+public class LiquidSolidifyBlock extends LiquidBlock implements EntityBlock {
 	private final Supplier<Block> blockSupplier;
 
-	public LiquidEntityBlock(Properties properties, Supplier<? extends FlowingFluid> supplier, Supplier<Block> blockSupplier) {
+	public LiquidSolidifyBlock(Properties properties, Supplier<? extends FlowingFluid> supplier, Supplier<Block> blockSupplier) {
 		super(supplier.get(), properties);
 		this.blockSupplier = blockSupplier;
 	}
@@ -49,7 +49,7 @@ public class LiquidEntityBlock extends LiquidBlock implements EntityBlock {
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn) {
 		super.entityInside(state, level, pos, entityIn);
 		if (entityIn instanceof LivingEntity entity) {
-			if (state.getBlock() instanceof LiquidEntityBlock) {
+			if (state.getBlock() instanceof LiquidSolidifyBlock) {
 				if (true  /* FIXME LiquidConfig.COMMON.liquidCausesNausea.get()*/) {
 					entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 1, false, false));
 				}
@@ -63,7 +63,7 @@ public class LiquidEntityBlock extends LiquidBlock implements EntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new LiquidBlockEntity(pos, state);
+		return new LiquidSolidifyBlockEntity(pos, state);
 	}
 
 	@Nullable
@@ -73,8 +73,8 @@ public class LiquidEntityBlock extends LiquidBlock implements EntityBlock {
 	}
 
 	@Nullable
-	protected static <T extends BlockEntity> BlockEntityTicker<T> createLiquidTicker(Level level, BlockEntityType<T> blockEntityType, BlockEntityType<? extends LiquidBlockEntity> blockEntityType1) {
-		return level.isClientSide ? null : createTickerHelper(blockEntityType, blockEntityType1, LiquidBlockEntity::serverTick);
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createLiquidTicker(Level level, BlockEntityType<T> blockEntityType, BlockEntityType<? extends LiquidSolidifyBlockEntity> blockEntityType1) {
+		return level.isClientSide ? null : createTickerHelper(blockEntityType, blockEntityType1, LiquidSolidifyBlockEntity::serverTick);
 	}
 
 	@Nullable

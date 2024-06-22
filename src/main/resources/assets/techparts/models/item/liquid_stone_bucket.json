@@ -1,5 +1,0 @@
-{
-  "parent": "neoforge:item/bucket",
-  "fluid": "liquidblocks:liquid_stone",
-  "loader": "neoforge:fluid_container"
-}

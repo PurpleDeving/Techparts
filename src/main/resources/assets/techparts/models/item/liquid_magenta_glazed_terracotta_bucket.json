@@ -1,5 +1,0 @@
-{
-  "parent": "neoforge:item/bucket",
-  "fluid": "liquidblocks:liquid_magenta_glazed_terracotta",
-  "loader": "neoforge:fluid_container"
-}

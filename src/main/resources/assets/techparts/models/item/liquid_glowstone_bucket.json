@@ -1,5 +1,5 @@
 {
   "parent": "neoforge:item/bucket",
-  "fluid": "liquidblocks:liquid_glowstone",
+  "fluid": "techparts:liquid_glowstone",
   "loader": "neoforge:fluid_container"
 }

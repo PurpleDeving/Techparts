@@ -1,5 +1,6 @@
 package io.purple.techparts;
 
+import io.purple.techparts.client.ClientHandler;
 import io.purple.techparts.client.CreativeTab;
 import io.purple.techparts.material.CreateMaterialCombos;
 import io.purple.techparts.material.Materials;
@@ -147,6 +148,8 @@ public class TechParts
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+
         }
+
     }
 }
