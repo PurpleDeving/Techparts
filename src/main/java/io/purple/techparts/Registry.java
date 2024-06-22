@@ -40,7 +40,7 @@ public class Registry {
                     LIQUID_CYAN_CONCRETE.getFluidBlock(),
                     LIQUID_BLUE_CONCRETE.getFluidBlock(),
                     LIQUID_GREEN_CONCRETE.getFluidBlock(),
-                    LIQUID_BLACK_CONCRETE.getFluidBlock(),
+                    //LIQUID_BLACK_CONCRETE.getFluidBlock(),
                     LIQUID_GLOWSTONE.getFluidBlock()
                     ).build(null));
 
