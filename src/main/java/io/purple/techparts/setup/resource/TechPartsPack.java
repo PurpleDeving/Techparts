@@ -35,12 +35,13 @@ public class TechPartsPack extends AbstractPackResources implements PreparableRe
     public static final PackLocationInfo LOCATION_INFO = new PackLocationInfo(
             "techparts.pack", Component.translatable("techparts.pack.title"), PackSource.BUILT_IN, Optional.empty()
     );
-    public static final String TEXTURE_DIRECTORY = "textures/";
-    public static final String BLOCK_DIRECTORY = "block/";
     public static final Set<String> NAMESPACES = ImmutableSet.of(MODID);
 
     private final PackMetadataSection packInfo;
-    private Map<ResourceLocation, IoSupplier<InputStream>> resources = new HashMap<>();
+
+    private Map<ResourceLocation, IoSupplier<InputStream>> resourceMap = new HashMap<>();
+
+
 
     public TechPartsPack() {
         super(LOCATION_INFO);
@@ -48,8 +49,8 @@ public class TechPartsPack extends AbstractPackResources implements PreparableRe
                 Component.translatable("techparts.pack.description"),
                 SharedConstants.getCurrentVersion().getPackVersion(PackType.CLIENT_RESOURCES)
         );
-
     }
+
 
 
     @Override
@@ -61,81 +62,16 @@ public class TechPartsPack extends AbstractPackResources implements PreparableRe
             Executor workerExecutor,
             Executor mainExecutor
     ) {
-/*        this.gatherTextureData(manager, mainProfiler);*/
         return CompletableFuture.supplyAsync(() -> null, workerExecutor)
                 .thenCompose(stage::wait)
-                .thenAcceptAsync((noResult) -> {}, mainExecutor);
+                .thenAcceptAsync((noResult) -> {
+                    addResource(ResourceLocation.fromNamespaceAndPath(MODID,"lang/en_us.json"),JsonHandler.generateLangJson());
+                }, mainExecutor);
     }
 
-/*    protected void gatherTextureData(ResourceManager manager, ProfilerFiller profiler) {
-        Map<ResourceLocation, IoSupplier<InputStream>> resourceStreams = new HashMap<>();
 
-        textures.forEach(
-                (
-                        modLocation,
-                        vanillaLocation
-                ) -> generateImage(modLocation, vanillaLocation, Minecraft.getInstance().getResourceManager())
-                        .ifPresent(pair -> {
-                            NativeImage image = pair.getFirst();
-                            ResourceLocation textureID = makeTextureID(modLocation);
-                            resourceStreams.put(textureID, () -> new ByteArrayInputStream(image.asByteArray()));
-                            pair.getSecond()
-                                    .ifPresent(
-                                            metadataGetter -> resourceStreams.put(getMetadataLocation(textureID), metadataGetter)
-                                    );
-                        })
-        );
-
-        this.resources = resourceStreams;
-    }*/
-
-    public static ResourceLocation makeTextureID(ResourceLocation id) {
-        return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), TEXTURE_DIRECTORY + id.getPath() + ".png");
-    }
-
-    public static ResourceLocation getMetadataLocation(ResourceLocation id) {
-        return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + ".mcmeta");
-    }
-
-/*    public Optional<Pair<NativeImage, Optional<IoSupplier<InputStream>>>> generateImage(
-            ResourceLocation modLocation,
-            ResourceLocation vanillaLocation,
-            ResourceManager manager
-    ) {
-        ResourceLocation parentFile = makeTextureID(vanillaLocation);
-        try (InputStream inputStream = manager.getResource(parentFile).orElseThrow().open()) {
-            NativeImage image = NativeImage.read(inputStream);
-            NativeImage transformedImage = this.transformImage(image);
-            ResourceLocation metadata = getMetadataLocation(parentFile);
-            Optional<IoSupplier<InputStream>> metadataLookup = Optional.empty();
-            BufferedReader bufferedReader = null;
-            JsonObject metadataJson;
-            if (manager.getResource(metadata).isPresent()) {
-                try (InputStream metadataStream = manager.getResource(metadata).get().open()) {
-                    bufferedReader = new BufferedReader(new InputStreamReader(metadataStream, StandardCharsets.UTF_8));
-                    metadataJson = GsonHelper.parse(bufferedReader);
-                } catch (Exception e) {
-                    return Optional.empty();
-                } finally {
-                    IOUtils.closeQuietly(bufferedReader);
-                }
-                JsonObject metaDataJsonForLambda = metadataJson;
-                metadataLookup =
-                        Optional.of(() -> new ByteArrayInputStream(metaDataJsonForLambda.toString().getBytes()));
-            }
-            return Optional.of(Pair.of(transformedImage, metadataLookup));
-        } catch (IOException | NoSuchElementException e) {
-            return Optional.empty();
-        }
-    }*/
-
-    public NativeImage transformImage(NativeImage image) {
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                int oldColor = image.getPixelRGBA(x, y);
-            }
-        }
-        return image;
+    public void addResource(ResourceLocation location, String jsonContent) {
+        resourceMap.put(location, () -> new ByteArrayInputStream(jsonContent.getBytes(StandardCharsets.UTF_8)));
     }
 
     @Override
@@ -153,9 +89,9 @@ public class TechPartsPack extends AbstractPackResources implements PreparableRe
     public IoSupplier<InputStream> getRootResource(String... fileName) {
         return null;
     }
-
     @Override
     public void close() {}
+
 
     @Override
     public Set<String> getNamespaces(PackType type) {
@@ -163,27 +99,15 @@ public class TechPartsPack extends AbstractPackResources implements PreparableRe
     }
 
     @Override
-    public IoSupplier<InputStream> getResource(PackType type, ResourceLocation id) {
-        if (this.resources.containsKey(id)) {
-            IoSupplier<InputStream> streamGetter = this.resources.get(id);
-            if (streamGetter == null) {
-                return null;
-            }
 
-            try {
-                return streamGetter;
-            } catch (Exception e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
+    public IoSupplier<InputStream> getResource(PackType type, ResourceLocation id) {
+        return resourceMap.get(id);
     }
 
     @Override
     public void listResources(PackType type, String namespace, String id, ResourceOutput output) {
         if (namespace.equals(MODID)) {
-            this.resources.forEach((name, supplier) -> {
+            resourceMap.forEach((name, supplier) -> {
                 if (name.getPath().startsWith(id)) {
                     output.accept(name, getResource(type, name));
                 }
