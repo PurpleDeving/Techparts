@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.datafixers.util.Pair;
+import io.purple.techparts.TechParts;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -62,10 +63,14 @@ public class TechPartsPack extends AbstractPackResources implements PreparableRe
             Executor workerExecutor,
             Executor mainExecutor
     ) {
+        TechParts.LOGGER.info("Reach 1 - Reload Method");
         return CompletableFuture.supplyAsync(() -> null, workerExecutor)
                 .thenCompose(stage::wait)
                 .thenAcceptAsync((noResult) -> {
-                    addResource(ResourceLocation.fromNamespaceAndPath(MODID,"lang/en_us.json"),JsonHandler.generateLangJson());
+                    String test = JsonHandler.generateLangJson();
+                    TechParts.LOGGER.info("Reach 2 - Inside Reload");
+                    TechParts.LOGGER.info(test);
+                    addResource(ResourceLocation.fromNamespaceAndPath(MODID,"lang/en_us.json"),test);
                 }, mainExecutor);
     }
 

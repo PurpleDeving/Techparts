@@ -24,7 +24,7 @@ public class CreateMaterialCombos {
                         // TODO - Implement Blocks
                         break;
                     case LIQUID:
-                        LOGGER.info("REACH 9981");
+                        //LOGGER.info("REACH 9981");
                         // TODO - Color Mix from Primary and secondary
                         // TODO - Add to a List to add to the blockentities thingy if needed
 

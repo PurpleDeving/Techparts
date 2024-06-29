@@ -14,10 +14,10 @@ import net.minecraft.server.packs.PackSelectionConfig;
 
 import static io.purple.techparts.TechParts.MODID;
 
+
 @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ResourcePackAdder {
     public static final TechPartsPack VIRTUAL_PACK = new TechPartsPack();
-    // TODO LOOK AT DOWNLOADED PACK MOD EXAMPLE THINGY FROM PYTHON
 
     @SubscribeEvent
     public static void addPackFinders(AddPackFindersEvent event) {
@@ -28,7 +28,6 @@ public class ResourcePackAdder {
                             public PackResources openPrimary(PackLocationInfo p_326301_) {
                                 return VIRTUAL_PACK;
                             }
-
                             @Override
                             public PackResources openFull(PackLocationInfo p_326241_, Pack.Metadata p_325959_) {
                                 return VIRTUAL_PACK;

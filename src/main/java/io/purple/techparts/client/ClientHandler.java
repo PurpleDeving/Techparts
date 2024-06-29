@@ -39,7 +39,7 @@ public class ClientHandler {
 			//LOGGER.info(itemObject.toString());
 			//LOGGER.info(itemObject.get().getDescriptionId());
 			if (itemObject.get() instanceof BucketItem){
-				LOGGER.info("REACH 3393");
+				//LOGGER.info("REACH 3393");
 				colors.register((stack, index) -> {
 					if (index == 1 && stack.getItem() instanceof BucketItem bucketItem) {
 						return IClientFluidTypeExtensions.of(bucketItem.content).getTintColor();

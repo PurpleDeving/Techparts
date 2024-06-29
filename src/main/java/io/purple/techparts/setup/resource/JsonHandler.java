@@ -100,7 +100,9 @@ public class JsonHandler {
         return tagString.toString();
     }
 
-    public static Test.IResourceStreamSupplier ofText(String text) {
-        return Test.IResourceStreamSupplier.create(() -> true, () -> new ByteArrayInputStream(text.getBytes()));
+    public static TechPartsPack.IResourceStreamSupplier ofText(String text) {
+
+        return () -> new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
     }
 }
