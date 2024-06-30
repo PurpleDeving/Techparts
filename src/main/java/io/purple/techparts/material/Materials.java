@@ -39,6 +39,8 @@ public class Materials {
             .parts(all)
             .build();
 
+    private static final Material Glowstone = new Material.Builder("glowstone").build();
+
     public static void init(){
         MAT_LIST.put(Gold.matId(),Gold);
     }

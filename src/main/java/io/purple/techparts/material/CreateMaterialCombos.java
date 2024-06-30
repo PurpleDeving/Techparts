@@ -9,8 +9,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 import org.slf4j.Logger;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.function.Supplier;
+
 
 public class CreateMaterialCombos {
 
@@ -26,9 +28,25 @@ public class CreateMaterialCombos {
                         // TODO - Implement Blocks
                         break;
                     case LIQUID:
-                        //LOGGER.info("REACH 9981");
-                        // TODO - Color Mix from Primary and secondary
-                        // TODO - Add to a List to add to the blockentities thingy if needed
+                        String fluidId = material.matId()+"_fluid";         // No MODID Present here
+                        int color = material.primary().getRGB();            // Just RGB, no alpha here // FIXME - Add mix color for Primary + Secondary
+                        Supplier<Block> solidifyBlockSupplier = null;       // Should the block solidify ?
+                        MapColor mapColor = DyeColor.GREEN.getMapColor();   // TODO - Implement MapColor
+
+                        // Build the Fluid
+                        FluidBuilder fluidBuilder = new FluidBuilder(fluidId, color, solidifyBlockSupplier).mapColor(mapColor);
+
+                        // Switch over the different Materials and what they do
+                        switch (material.matId()){
+                            case "gold":
+                                LOGGER.info("TEST 5 - Gold in Liquid Creation");
+                                fluidBuilder.hot();
+                            case "glowstone":
+                                fluidBuilder.luminosity(15);
+                                fluidBuilder.gas();
+                            default:
+                        }
+
 
                         TPFREGS.add(registerFluid(material.matId()+"_fluid",material.primary().getRGB(),null, DyeColor.GREEN.getMapColor(),false,12));
                     default:

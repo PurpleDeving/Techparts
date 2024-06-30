@@ -86,7 +86,7 @@ public class TPFReg {
                 .bucket(bucket).block(block);
     }
 
-    protected TPFReg(String name, Supplier<Block> solidifyBlockSupplier, MapColor mapColor, int color, boolean coldLiquid, int luminosity) {
+    protected TPFReg(String name, Supplier<Block> solidifyBlockSupplier, MapColor mapColor, int color, boolean coldLiquid, int luminosity, boolean gas) {
         this.name = name;
         fluidType = Registry.FLUID_TYPES.register(name, () -> new FluidType(FluidHelper.createTypeProperties().temperature(coldLiquid ? 300 : 1000).lightLevel(luminosity)) {
             @Override

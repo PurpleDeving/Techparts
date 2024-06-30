@@ -11,6 +11,7 @@ public class FluidBuilder {
     private MapColor mapColor = MapColor.WATER;
     private int color;
     private boolean hot = false;
+    private boolean gas = false;                    // Is it a gas/should it move upwards
     private int luminosity = 0;
 
     public FluidBuilder(String name, int color, Supplier<Block> blockSupplier) {
@@ -39,9 +40,14 @@ public class FluidBuilder {
         return this;
     }
 
-    public TPFReg build() {
-        return new TPFReg(name, solidifyBlockSupplier, mapColor, color, hot, luminosity);
+    public void gas() {
+        this.gas = true;
     }
+
+    public TPFReg build() {
+        return new TPFReg(name, solidifyBlockSupplier, mapColor, color, hot, luminosity,gas);
+    }
+
 
 
 }
