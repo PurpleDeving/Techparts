@@ -9,11 +9,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class CreateMaterialCombos {
 
     private static final Logger LOGGER = TechParts.LOGGER;
+    public static ArrayList<TPFReg> TPFREGS = new ArrayList<>();
 
     public static void init(){
 
@@ -28,7 +30,7 @@ public class CreateMaterialCombos {
                         // TODO - Color Mix from Primary and secondary
                         // TODO - Add to a List to add to the blockentities thingy if needed
 
-                        registerFluid(material.matId()+"_fluid",material.primary().getRGB(),null, DyeColor.GREEN.getMapColor(),false,12);
+                        TPFREGS.add(registerFluid(material.matId()+"_fluid",material.primary().getRGB(),null, DyeColor.GREEN.getMapColor(),false,12));
                     default:
                         // TODO - Imnplement Items
                 }
@@ -39,6 +41,7 @@ public class CreateMaterialCombos {
 
 
     }
+
 
 
     public static TPFReg registerFluid(String name, int color, Supplier<Block> solidifyBlockSupplier, MapColor mapColor, boolean hot, int luminosity) {

@@ -5,6 +5,8 @@ import io.purple.techparts.client.CreativeTab;
 import io.purple.techparts.material.CreateMaterialCombos;
 import io.purple.techparts.material.Materials;
 import io.purple.techparts.material.Part;
+import io.purple.techparts.setup.pack.ResourcePackAdder;
+import io.purple.techparts.setup.pack.TechPartsPack;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -82,7 +84,7 @@ public class TechParts
         // Create Material Items
         CreateMaterialCombos.init();
 
-
+        ResourcePackAdder.registerResourcePack(TechPartsPack.getPackInstance());
 
         // Last Step before .register calls
         CreativeTab.creativeTabInit();

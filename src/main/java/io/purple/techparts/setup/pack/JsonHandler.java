@@ -1,13 +1,29 @@
-package io.purple.techparts.setup.resource;
+package io.purple.techparts.setup.pack;
 
 import io.purple.techparts.TechParts;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import com.google.gson.JsonObject;
-import java.util.Map;
+
+import static io.purple.techparts.TechParts.MODID;
 
 public class JsonHandler {
+
+    /*******************************************************
+     *
+     *  Buckets
+     *
+     *****************************************************/
+
+    public static JsonObject generateBucket(String fluidId){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("parent", "neoforge:item/bucket");
+        jsonObject.addProperty("fluid", MODID + ":" + fluidId);
+        jsonObject.addProperty("loader", "neoforge:fluid_container");
+        return  jsonObject;
+    }
+
 
     /*******************************************************
      *
@@ -70,7 +86,7 @@ public class JsonHandler {
         return "{\n" +
                 "  \"parent\": \"item/generated\",\n" +
                 "  \"textures\": {\n" +
-                "    \"layer0\": \"" + TechParts.MODID + ":item/" + path + "\"\n" +
+                "    \"layer0\": \"" + MODID + ":item/" + path + "\"\n" +
                 "  }\n" +
                 "}";
     }
@@ -101,8 +117,13 @@ public class JsonHandler {
     }
 
     public static TechPartsPack.IResourceStreamSupplier ofText(String text) {
+        return TechPartsPack.IResourceStreamSupplier.create(() -> true, () -> new ByteArrayInputStream(text.getBytes()));
+    }
 
-        return () -> new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+    public static TechPartsPack.IResourceStreamSupplier ofText(JsonObject json) {
+
+        return ofText(json.toString());
 
     }
 }
