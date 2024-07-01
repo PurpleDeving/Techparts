@@ -9,4 +9,6 @@ public class LiquidBucketItem extends BucketItem {
     public LiquidBucketItem(Properties builder, Supplier<? extends Fluid> supplier) {
         super(supplier.get(), builder);
     }
+
+
 }

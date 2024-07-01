@@ -2,11 +2,19 @@ package io.purple.techparts;
 
 import io.purple.techparts.client.ClientHandler;
 import io.purple.techparts.client.CreativeTab;
+import io.purple.techparts.fluid.TPFReg;
 import io.purple.techparts.material.CreateMaterialCombos;
 import io.purple.techparts.material.Materials;
 import io.purple.techparts.material.Part;
 import io.purple.techparts.setup.pack.ResourcePackAdder;
 import io.purple.techparts.setup.pack.TechPartsPack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -16,10 +24,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -43,11 +47,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static io.purple.techparts.Registry.*;
 import static io.purple.techparts.client.CreativeTab.CREATIVE_MODE_TABS;
+import static io.purple.techparts.material.CreateMaterialCombos.TPFREGS;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(TechParts.MODID)
-public class TechParts
-{
+public class TechParts {
+
+    // TODO - Version thingy in build.gradle
+
     // Define mod id in a common place for everything to reference
     public static final String MODID = "techparts";
     // Directly reference a slf4j logger
@@ -68,11 +75,9 @@ public class TechParts
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
 
-
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
-    public TechParts(IEventBus modEventBus, ModContainer modContainer)
-    {
+    public TechParts(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -112,8 +117,7 @@ public class TechParts
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
 
@@ -123,30 +127,48 @@ public class TechParts
         LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
 
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+
+        // Add Dispenser Interaction for the Fluids similar to LAVA
+        DispenseItemBehavior dispenseitembehavior1 = new DefaultDispenseItemBehavior() {
+            private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
+
+            @Override
+            public ItemStack execute(BlockSource p_338850_, ItemStack p_338251_) {
+                DispensibleContainerItem dispensiblecontaineritem = (DispensibleContainerItem) p_338251_.getItem();
+                BlockPos blockpos = p_338850_.pos().relative(p_338850_.state().getValue(DispenserBlock.FACING));
+                Level level = p_338850_.level();
+                if (dispensiblecontaineritem.emptyContents(null, level, blockpos, null, p_338251_)) {
+                    dispensiblecontaineritem.checkExtraContent(null, level, p_338251_, blockpos);
+                    return this.consumeWithRemainder(p_338850_, p_338251_, new ItemStack(Items.BUCKET));
+                } else {
+                    return this.defaultDispenseItemBehavior.dispense(p_338850_, p_338251_);
+                }
+            }
+        };
+
+        for (TPFReg tpfReg : TPFREGS) {
+            DispenserBlock.registerBehavior(tpfReg.getBucket().asItem(), dispenseitembehavior1);
+        }
     }
 
     // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
             event.accept(EXAMPLE_BLOCK_ITEM);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
+    public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        public static void onClientSetup(FMLClientSetupEvent event) {
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

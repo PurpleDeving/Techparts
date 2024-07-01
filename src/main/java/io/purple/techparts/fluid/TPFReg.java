@@ -7,12 +7,20 @@ import io.purple.techparts.fluid.block.LiquidSolidifyBlock;
 import io.purple.techparts.fluid.block.TPFBlock;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
@@ -127,6 +135,9 @@ public class TPFReg {
                 });
             }
         });
+
+
+
         source = Registry.FLUIDS.register(name, () -> new TPFFluid.Source(
                 createProperties(fluidType, source, flowing, bucket, fluidBlock))
         );
@@ -148,6 +159,7 @@ public class TPFReg {
 
 
         bucket = Registry.ITEMS.register(name + "_bucket", () -> new LiquidBucketItem(new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1), source));
+
     }
 
 }

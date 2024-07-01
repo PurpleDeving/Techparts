@@ -32,17 +32,26 @@ public class Materials {
 
      ********************************************************/
 
+    // TODO - Documentation for all these Builder elements
 
 
     private static final Material Gold = new Material.Builder("gold")
             .primary(0xfdf55f).secondary(0xf25833).tex(Texture.DULL)
             .parts(all)
+            .fluidHot()
+            .fluidSlow()
             .build();
 
-    private static final Material Glowstone = new Material.Builder("glowstone").build();
+    private static final Material Glowstone = new Material.Builder("glowstone")
+            .fluidHot()
+            .fluidUp()
+            .glow()
+            .parts(all)
+            .build();
 
     public static void init(){
         MAT_LIST.put(Gold.matId(),Gold);
+        MAT_LIST.put(Glowstone.matId(),Glowstone);
     }
 
     // TODO - Add KubeJS Integration for this. It should add the defined elements in the HashMap, guaranteeing an overwrite if the id is the same

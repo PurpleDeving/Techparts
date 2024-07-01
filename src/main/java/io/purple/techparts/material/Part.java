@@ -11,7 +11,9 @@ public enum Part {
     BLOCK("block"),
 
     // LIQUID
-    LIQUID("fluid");
+    LIQUID("fluid"),
+    GAS("gas");
+
 
     private final String id;
 

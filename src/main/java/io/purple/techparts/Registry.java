@@ -27,22 +27,29 @@ public class Registry {
     public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
 
-    public static final TPFReg LIQUID_CYAN_CONCRETE = new FluidBuilder("liquid_cyan_concrete", 0xFFf9d49c/*5013401*/, () -> Blocks.CYAN_CONCRETE).mapColor(DyeColor.CYAN.getMapColor()).build();
-    public static final TPFReg LIQUID_BLUE_CONCRETE = new FluidBuilder("liquid_blue_concrete", 0xFFf9d49c /*3361970*/, () -> Blocks.BLUE_CONCRETE).mapColor(DyeColor.BLUE.getMapColor()).build();
+/*
+    public static final TPFReg LIQUID_CYAN_CONCRETE = new FluidBuilder("liquid_cyan_concrete", 0xFFf9d49c*/
+/*5013401*//*
+, () -> Blocks.CYAN_CONCRETE).mapColor(DyeColor.CYAN.getMapColor()).build();
+    public static final TPFReg LIQUID_BLUE_CONCRETE = new FluidBuilder("liquid_blue_concrete", 0xFFf9d49c */
+/*3361970*//*
+, () -> Blocks.BLUE_CONCRETE).mapColor(DyeColor.BLUE.getMapColor()).build();
     public static final TPFReg LIQUID_GREEN_CONCRETE = new FluidBuilder("liquid_green_concrete", 6717235, () -> Blocks.GREEN_CONCRETE).mapColor(DyeColor.GREEN.getMapColor()).build();
-    public static final TPFReg LIQUID_BLACK_CONCRETE = new FluidBuilder("liquid_black_concrete", 0xFFf9d49c /*1644825*/).mapColor(DyeColor.BLACK.getMapColor()).build();
+    public static final TPFReg LIQUID_BLACK_CONCRETE = new FluidBuilder("liquid_black_concrete", 0xFFf9d49c */
+/*1644825*//*
+).mapColor(DyeColor.BLACK.getMapColor()).build();
+*/
 
-    public static final TPFReg LIQUID_GLOWSTONE = new FluidBuilder("liquid_glowstone", 0xFFf9d49c, () -> Blocks.GLOWSTONE).hot().mapColor(MapColor.SAND).luminosity(12).build();
 
 
     public static final Supplier<BlockEntityType<LiquidSolidifyBlockEntity>> LIQUID_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("liquid_tile",
-            () -> BlockEntityType.Builder.of(LiquidSolidifyBlockEntity::new,
+            () -> BlockEntityType.Builder.of(LiquidSolidifyBlockEntity::new/*,
                     LIQUID_CYAN_CONCRETE.getFluidBlock(),
                     LIQUID_BLUE_CONCRETE.getFluidBlock(),
                     LIQUID_GREEN_CONCRETE.getFluidBlock(),
                     //LIQUID_BLACK_CONCRETE.getFluidBlock(),
                     LIQUID_GLOWSTONE.getFluidBlock()
-                    ).build(null));
+                    */).build(null));
 
 
 
