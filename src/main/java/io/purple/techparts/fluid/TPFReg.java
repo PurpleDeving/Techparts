@@ -5,6 +5,7 @@ import io.purple.techparts.Registry;
 import io.purple.techparts.TechParts;
 import io.purple.techparts.fluid.block.LiquidSolidifyBlock;
 import io.purple.techparts.fluid.block.TPFBlock;
+import io.purple.techparts.material.Material;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -94,7 +95,7 @@ public class TPFReg {
                 .bucket(bucket).block(block);
     }
 
-    protected TPFReg(String name, Supplier<Block> solidifyBlockSupplier, MapColor mapColor, int color, boolean coldLiquid, int luminosity, boolean gas) {
+    protected TPFReg(String name, Supplier<Block> solidifyBlockSupplier, MapColor mapColor, int color, boolean coldLiquid, int luminosity, Boolean slowing, Boolean screenWiggle) {
         this.name = name;
         fluidType = Registry.FLUID_TYPES.register(name, () -> new FluidType(FluidHelper.createTypeProperties().temperature(coldLiquid ? 300 : 1000).lightLevel(luminosity)) {
             @Override

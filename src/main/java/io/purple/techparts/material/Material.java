@@ -129,12 +129,8 @@ public record Material (String matId, String matName, Color primary, Color secon
         }
 
 
-        public Builder fluidUp() {
-            fluidBuilder.goUp();
-            return this;
-        }
-
         private void liquidFixes(){
+
             if (fluidBuilder.getLuminosity() == -1){ // If Luminosity isn't overwritten -> Set it to whats logical
                 if (this.glow){
                     fluidBuilder.luminosity(15);

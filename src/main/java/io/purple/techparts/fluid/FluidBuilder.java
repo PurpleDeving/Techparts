@@ -1,5 +1,6 @@
 package io.purple.techparts.fluid;
 
+import io.purple.techparts.material.Material;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 
@@ -11,7 +12,8 @@ public class FluidBuilder {
     private MapColor mapColor = MapColor.WATER;
     private int color = -1;
     private boolean hot = false;
-    private boolean goUp = false;                    // Act like tinker glowstone /should it move upwards
+    private boolean slowing = false;
+    private boolean screenWiggle = false;
     private int luminosity = -1;
 
     public FluidBuilder(String name, int color, Supplier<Block> blockSupplier) {
@@ -54,9 +56,13 @@ public class FluidBuilder {
         return this;
     }
 
-    // TODO - Even worth doing ?
-    public FluidBuilder goUp() {
-        this.goUp = true;
+    public FluidBuilder slowing() {
+        this.slowing = true;
+        return this;
+    }
+
+    public FluidBuilder screenWiggle() {
+        this.screenWiggle = true;
         return this;
     }
 
@@ -64,7 +70,7 @@ public class FluidBuilder {
         if(fluidId == null){
             throw new IllegalArgumentException("Techparts: Missing fluid id");
         }
-        return new TPFReg(fluidId, solidifyBlockSupplier, mapColor, color, hot, luminosity,goUp);
+        return new TPFReg(fluidId, solidifyBlockSupplier, mapColor, color, hot, luminosity,slowing,screenWiggle);
     }
 
     /*****************************
