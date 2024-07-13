@@ -54,6 +54,7 @@ import static io.purple.techparts.material.CreateMaterialCombos.TPFREGS;
 public class TechParts {
 
     // TODO - Version thingy in build.gradle
+    // TODO - KUBEJS INTEGRATION
 
     // Define mod id in a common place for everything to reference
     public static final String MODID = "techparts";

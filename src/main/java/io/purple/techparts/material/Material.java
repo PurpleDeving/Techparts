@@ -122,9 +122,14 @@ public record Material (String matId, String matName, Color primary, Color secon
             return this;
         }
 
-
+        // THE FLUID FLOWS SLOW (just 4 tiles)
         public Builder fluidSlow() {
             // FIXME
+            return this;
+        }
+        // The player gets SLOWED
+        public Builder fluidSlowing() {
+            this.fluidBuilder.slowing();
             return this;
         }
 
@@ -141,6 +146,7 @@ public record Material (String matId, String matName, Color primary, Color secon
                 }
             }
         }
+
 
 
     }

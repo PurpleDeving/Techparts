@@ -148,7 +148,7 @@ public class TPFReg {
 
         if (solidifyBlockSupplier == null){ // If there is NO Block to Solidify: Create a normal Fluid Block.
             fluidBlock = Registry.BLOCKS.register(name, () -> new TPFBlock(
-                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().replaceable().noLootTable().lightLevel(state -> luminosity), source));
+                    Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().replaceable().noLootTable().lightLevel(state -> luminosity), source, slowing, screenWiggle));
         } else if (name.equals("ore")) {
             fluidBlock = Registry.BLOCKS.register(name, () -> new LiquidOreBlock(
                     Block.Properties.of().mapColor(mapColor).pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).randomTicks().replaceable().noLootTable().lightLevel(state -> luminosity), source, solidifyBlockSupplier));

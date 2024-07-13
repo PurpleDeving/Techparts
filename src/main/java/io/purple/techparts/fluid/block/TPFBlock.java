@@ -14,8 +14,14 @@ import java.util.function.Supplier;
 
 public class TPFBlock extends LiquidBlock {
 
-	public TPFBlock(Properties properties, Supplier<? extends FlowingFluid> supplier) {
+
+	public final boolean slowing;
+	public final boolean wiggle;
+
+	public TPFBlock(Properties properties, Supplier<? extends FlowingFluid> supplier,Boolean slowing, Boolean wiggle) {
 		super(supplier.get(), properties);
+		this.slowing = slowing;
+		this.wiggle = wiggle;
 	}
 
 
@@ -24,10 +30,10 @@ public class TPFBlock extends LiquidBlock {
 		super.entityInside(state, level, pos, entityIn);
 		if (entityIn instanceof LivingEntity entity) {
 			if (state.getBlock() instanceof TPFBlock) {
-				if (true  /* FIXME LiquidConfig.COMMON.liquidCausesNausea.get()*/) {
+				if (wiggle) {
 					entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 1, false, false));
 				}
-				if (true /* FIXME LiquidConfig.COMMON.liquidCausesSlowness.get()*/) {
+				if (slowing) {
 					entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1, false, false));
 				}
 			}

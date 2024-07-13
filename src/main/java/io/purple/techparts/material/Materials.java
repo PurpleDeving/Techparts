@@ -40,11 +40,11 @@ public class Materials {
             .parts(all)
             .fluidHot()
             .fluidSlow()
+            .fluidSlowing()
             .build();
 
     private static final Material Glowstone = new Material.Builder("glowstone")
             .fluidHot()
-            .fluidUp()
             .glow()
             .parts(all)
             .build();
