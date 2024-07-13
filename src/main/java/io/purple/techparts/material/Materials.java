@@ -52,6 +52,9 @@ public class Materials {
     public static void init(){
         MAT_LIST.put(Gold.matId(),Gold);
         MAT_LIST.put(Glowstone.matId(),Glowstone);
+
+
+
     }
 
     // TODO - Add KubeJS Integration for this. It should add the defined elements in the HashMap, guaranteeing an overwrite if the id is the same

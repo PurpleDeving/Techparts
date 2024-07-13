@@ -1,0 +1,1 @@
+io.purple.techparts.compat.kjs.TPKubeJSPlugin
